@@ -1,4 +1,7 @@
-===FRONTEND PACKAGE.JSON===
+mkdir definitive-word
+cd definitive-word
+mkdir -p frontend/{components,pages,styles,public}
+mkdir -p backend/{models,routes,middleware}
 {
   "name": "definitive-word-frontend",
   "version": "1.0.0",
@@ -25,8 +28,6 @@
     "eslint-config-next": "14.0.0"
   }
 }
-
-===TAILWIND CONFIG===
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -57,16 +58,12 @@ module.exports = {
   },
   plugins: [],
 }
-
-===POSTCSS CONFIG===
 module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
   },
 }
-
-===NEXT CONFIG===
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -74,8 +71,6 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-
-===GLOBAL CSS===
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -154,8 +149,6 @@ module.exports = nextConfig
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
-
-===LAYOUT COMPONENT===
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -365,8 +358,6 @@ function Footer() {
     </footer>
   )
 }
-
-===BOOKCARD COMPONENT===
 import { motion } from 'framer-motion'
 import { FiStar, FiBook, FiUser, FiShoppingCart } from 'react-icons/fi'
 
@@ -451,8 +442,6 @@ export default function BookCard({ book }) {
     </motion.div>
   )
 }
-
-===CATEGORYCARD COMPONENT===
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -486,8 +475,6 @@ export default function CategoryCard({ category }) {
     </motion.div>
   )
 }
-
-===HOMEPAGE===
 import Layout from '../components/Layout'
 import BookCard from '../components/BookCard'
 import CategoryCard from '../components/CategoryCard'
@@ -760,8 +747,6 @@ export default function Home() {
     </Layout>
   )
 }
-
-===LIBRARY PAGE===
 import Layout from '../components/Layout'
 import BookCard from '../components/BookCard'
 import { useState } from 'react'
@@ -980,8 +965,6 @@ export default function Library() {
     </Layout>
   )
 }
-
-===BACKEND PACKAGE.JSON===
 {
   "name": "definitive-word-backend",
   "version": "1.0.0",
@@ -1014,15 +997,11 @@ export default function Library() {
   "author": "The Definitive Word Ministry",
   "license": "MIT"
 }
-
-===BACKEND ENV FILE===
 NODE_ENV=development
 PORT=5000
 FRONTEND_URL=http://localhost:3000
 MONGODB_URI=mongodb://localhost:27017/definitive-word
 JWT_SECRET=your-super-secret-jwt-key-here-change-in-production
-
-===BACKEND SERVER===
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
@@ -1089,8 +1068,6 @@ app.listen(PORT, () => {
   console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`)
   console.log(`📚 API URL: http://localhost:${PORT}`)
 })
-
-===BOOK MODEL===
 const mongoose = require('mongoose')
 
 const bookSchema = new mongoose.Schema({
@@ -1200,8 +1177,6 @@ bookSchema.index({
 })
 
 module.exports = mongoose.model('Book', bookSchema)
-
-===USER MODEL===
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
@@ -1312,8 +1287,6 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 }
 
 module.exports = mongoose.model('User', userSchema)
-
-===AUTH ROUTES===
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
@@ -1442,8 +1415,6 @@ router.get('/me', auth, async (req, res) => {
 })
 
 module.exports = router
-
-===BOOKS ROUTES===
 const express = require('express')
 const Book = require('../models/Book')
 const auth = require('../middleware/auth')
@@ -1536,8 +1507,6 @@ router.get('/:id', async (req, res) => {
 })
 
 module.exports = router
-
-===AUTH MIDDLEWARE===
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
@@ -1574,74 +1543,12 @@ const auth = async (req, res, next) => {
 }
 
 module.exports = auth
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Code Splitter</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        textarea { width: 100%; height: 300px; margin: 10px 0; }
-        button { padding: 10px 20px; margin: 5px; }
-        .file { background: #f0f0f0; padding: 10px; margin: 10px 0; }
-    </style>
-</head>
-<body>
-    <h2>Paste ALL Code Here:</h2>
-    <textarea id="allCode" placeholder="Paste the entire code here..."></textarea>
-    <br>
-    <button onclick="splitCode()">Split into Files</button>
-    <div id="files"></div>
+# Frontend
+cd frontend
+npm install
+npm run dev
 
-    <script>
-    function splitCode() {
-        const allCode = document.getElementById('allCode').value;
-        const files = {};
-        let currentFile = '';
-        let currentContent = [];
-        
-        const lines = allCode.split('\n');
-        
-        lines.forEach(line => {
-            if (line.startsWith('===') && line.endsWith('===')) {
-                if (currentFile) {
-                    files[currentFile] = currentContent.join('\n');
-                }
-                currentFile = line.replace(/===/g, '').trim();
-                currentContent = [];
-            } else {
-                currentContent.push(line);
-            }
-        });
-        
-        if (currentFile) {
-            files[currentFile] = currentContent.join('\n');
-        }
-        
-        displayFiles(files);
-    }
-    
-    function displayFiles(files) {
-        const container = document.getElementById('files');
-        container.innerHTML = '<h3>Copy each section to its file:</h3>';
-        
-        for (const [filename, content] of Object.entries(files)) {
-            const fileDiv = document.createElement('div');
-            fileDiv.className = 'file';
-            fileDiv.innerHTML = `
-                <strong>${filename}</strong>
-                <button onclick="copyText('${filename}')">Copy</button>
-                <pre>${content}</pre>
-            `;
-            container.appendChild(fileDiv);
-        }
-    }
-    
-    function copyText(filename) {
-        const content = document.querySelector(`strong:contains("${filename}")`).nextElementSibling.nextElementSibling.textContent;
-        navigator.clipboard.writeText(content).then(() => {
-            alert(`Copied ${filename}!`);
-        });
-    }
-    </script>
-</body>
-</html>
+# Backend (new terminal)
+cd backend
+npm install
+npm run dev

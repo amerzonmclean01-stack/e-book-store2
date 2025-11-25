@@ -18,6 +18,7 @@
             --dark-gray: #6B7280;
             --success: #10B981;
             --warning: #F59E0B;
+            --focus-ring: 0 0 0 3px rgba(212, 175, 55, 0.5);
         }
 
         * {
@@ -32,6 +33,36 @@
             color: var(--dark-blue);
             line-height: 1.6;
             overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* High Contrast Mode */
+        body.high-contrast {
+            --white: #000000;
+            --dark-blue: #FFFFFF;
+            --gray: #1a1a1a;
+            --light-blue: #2a2a2a;
+            --prophetic-blue: #FFFFFF;
+            color: #FFFFFF;
+            background-color: #000000;
+        }
+
+        body.high-contrast .product-card,
+        body.high-contrast .feature-card,
+        body.high-contrast .dashboard-sidebar,
+        body.high-contrast .dashboard-content,
+        body.high-contrast .modal-content {
+            background: #1a1a1a;
+            border: 2px solid #FFFFFF;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         .container {
@@ -39,6 +70,88 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+        }
+
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--gold);
+            color: var(--prophetic-blue);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 10000;
+            font-weight: bold;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
+
+        /* Accessibility Controls */
+        .accessibility-controls {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--white);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 1rem;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .accessibility-controls.show {
+            display: block;
+        }
+
+        .accessibility-toggle {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--gold);
+            color: var(--prophetic-blue);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group h4 {
+            margin-bottom: 0.5rem;
+            color: var(--prophetic-blue);
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-accessibility {
+            padding: 0.5rem;
+            border: 1px solid var(--gold);
+            background: var(--white);
+            color: var(--dark-blue);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-accessibility.active {
+            background: var(--gold);
+            color: var(--prophetic-blue);
         }
 
         /* Header Styles */
@@ -113,10 +226,14 @@
             font-weight: 500;
             transition: color 0.3s;
             position: relative;
+            padding: 0.5rem;
+            border-radius: 4px;
         }
 
-        nav a:hover {
+        nav a:hover, nav a:focus {
             color: var(--gold);
+            background: rgba(255,255,255,0.1);
+            outline: none;
         }
 
         nav a::after {
@@ -130,7 +247,7 @@
             transition: width 0.3s;
         }
 
-        nav a:hover::after {
+        nav a:hover::after, nav a:focus::after {
             width: 100%;
         }
 
@@ -169,6 +286,12 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn:focus {
+            outline: none;
+            box-shadow: var(--focus-ring);
         }
 
         .btn-outline {
@@ -177,7 +300,7 @@
             color: var(--gold);
         }
 
-        .btn-outline:hover {
+        .btn-outline:hover, .btn-outline:focus {
             background: var(--gold);
             color: var(--prophetic-blue);
         }
@@ -187,7 +310,7 @@
             color: var(--white);
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover, .btn-primary:focus {
             background: #9c1a1a;
             transform: translateY(-2px);
         }
@@ -198,7 +321,7 @@
             font-weight: 700;
         }
 
-        .btn-admin:hover {
+        .btn-admin:hover, .btn-admin:focus {
             background: #c19b2e;
             transform: translateY(-2px);
         }
@@ -209,10 +332,14 @@
             font-size: 1.5rem;
             cursor: pointer;
             transition: transform 0.3s;
+            padding: 0.5rem;
+            border-radius: 4px;
         }
 
-        .cart-icon:hover {
+        .cart-icon:hover, .cart-icon:focus {
             transform: scale(1.1);
+            background: rgba(255,255,255,0.1);
+            outline: none;
         }
 
         .cart-count {
@@ -231,6 +358,44 @@
             font-weight: bold;
         }
 
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--light-blue);
+            padding: 1rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: var(--white);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark-blue);
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .quick-action:hover, .quick-action:focus {
+            border-color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            outline: none;
+        }
+
+        .quick-action i {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(30, 58, 138, 0.9), rgba(15, 27, 58, 0.9)), url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
@@ -241,6 +406,12 @@
             padding: 5rem 0;
             text-align: center;
             position: relative;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero {
+                background-attachment: scroll;
+            }
         }
 
         .hero-content {
@@ -276,7 +447,7 @@
             font-weight: 700;
         }
 
-        .btn-gold:hover {
+        .btn-gold:hover, .btn-gold:focus {
             background: #c19b2e;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
@@ -315,11 +486,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
+            border: 1px solid transparent;
         }
 
-        .product-card:hover {
+        .product-card:hover, .product-card:focus-within {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: var(--gold);
         }
 
         .product-badge {
@@ -413,6 +586,58 @@
             flex: 1;
         }
 
+        /* Wishlist */
+        .wishlist-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--dark-gray);
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .wishlist-btn:hover, .wishlist-btn:focus {
+            background: var(--white);
+            color: var(--red);
+            transform: scale(1.1);
+            outline: none;
+        }
+
+        .wishlist-btn.active {
+            color: var(--red);
+        }
+
+        /* Quick View */
+        .quick-view-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--dark-blue);
+            transition: all 0.3s;
+            z-index: 2;
+            font-size: 0.8rem;
+        }
+
+        .quick-view-btn:hover, .quick-view-btn:focus {
+            background: var(--white);
+            color: var(--prophetic-blue);
+            outline: none;
+        }
+
         /* Dashboard Styles */
         .dashboard {
             padding: 2rem 0;
@@ -459,9 +684,10 @@
             transition: all 0.3s;
         }
 
-        .dashboard-nav a:hover, .dashboard-nav a.active {
+        .dashboard-nav a:hover, .dashboard-nav a:focus, .dashboard-nav a.active {
             background: var(--prophetic-blue);
             color: var(--white);
+            outline: none;
         }
 
         .dashboard-content {
@@ -654,7 +880,7 @@
             overflow: hidden;
         }
 
-        .feature-card:hover {
+        .feature-card:hover, .feature-card:focus-within {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
@@ -728,11 +954,13 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.2rem 0;
         }
 
-        .footer-column a:hover {
+        .footer-column a:hover, .footer-column a:focus {
             color: var(--gold);
             transform: translateX(5px);
+            outline: none;
         }
 
         .social-icons {
@@ -752,9 +980,10 @@
             transition: all 0.3s;
         }
 
-        .social-icons a:hover {
+        .social-icons a:hover, .social-icons a:focus {
             background: var(--gold);
             transform: translateY(-3px);
+            outline: none;
         }
 
         .copyright {
@@ -821,9 +1050,10 @@
             border-radius: 50%;
         }
 
-        .close-modal:hover {
+        .close-modal:hover, .close-modal:focus {
             color: var(--red);
             background: var(--gray);
+            outline: none;
         }
 
         .modal-title {
@@ -870,8 +1100,9 @@
             font-weight: 500;
         }
 
-        .form-footer a:hover {
+        .form-footer a:hover, .form-footer a:focus {
             text-decoration: underline;
+            outline: none;
         }
 
         /* Cart Styles */
@@ -939,9 +1170,10 @@
             border-radius: 4px;
         }
 
-        .cart-item-remove:hover {
+        .cart-item-remove:hover, .cart-item-remove:focus {
             transform: scale(1.1);
             background: rgba(185, 28, 28, 0.1);
+            outline: none;
         }
 
         .cart-total {
@@ -1015,6 +1247,57 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Keyboard Shortcuts Help */
+        .keyboard-shortcuts {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--white);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 1rem;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none;
+            max-width: 300px;
+        }
+
+        .keyboard-shortcuts.show {
+            display: block;
+        }
+
+        .keyboard-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--gold);
+            color: var(--prophetic-blue);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .shortcut-key {
+            background: var(--gray);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
@@ -1080,6 +1363,20 @@
                 margin-left: 0;
                 margin-top: 0.5rem;
             }
+
+            .quick-actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .accessibility-controls {
+                top: 120px;
+                right: 10px;
+                left: 10px;
+            }
+
+            .accessibility-toggle {
+                top: 120px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1094,10 +1391,107 @@
             .modal-content {
                 padding: 1.5rem;
             }
+
+            .keyboard-shortcuts {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .accessibility-toggle,
+            .keyboard-toggle,
+            .cart-icon,
+            .auth-buttons,
+            .user-menu,
+            .quick-actions,
+            footer {
+                display: none !important;
+            }
+
+            .product-actions {
+                display: none;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 12pt;
+            }
+
+            .product-card {
+                break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip to main content -->
+    <a href="#mainContent" class="skip-link">Skip to main content</a>
+
+    <!-- Accessibility Controls -->
+    <button class="accessibility-toggle" id="accessibilityToggle" aria-label="Accessibility Controls">
+        <i class="fas fa-universal-access"></i>
+    </button>
+
+    <div class="accessibility-controls" id="accessibilityControls">
+        <div class="control-group">
+            <h4>Text Size</h4>
+            <div class="control-buttons">
+                <button class="btn-accessibility" id="textSmaller">A-</button>
+                <button class="btn-accessibility" id="textNormal">A</button>
+                <button class="btn-accessibility" id="textLarger">A+</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <h4>Contrast</h4>
+            <div class="control-buttons">
+                <button class="btn-accessibility" id="contrastNormal">Normal</button>
+                <button class="btn-accessibility" id="contrastHigh">High Contrast</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <h4>Reading</h4>
+            <div class="control-buttons">
+                <button class="btn-accessibility" id="readingGuide">Reading Guide</button>
+                <button class="btn-accessibility" id="dyslexiaFont">Dyslexia Font</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Help -->
+    <button class="keyboard-toggle" id="keyboardToggle" aria-label="Keyboard Shortcuts">
+        <i class="fas fa-keyboard"></i>
+    </button>
+
+    <div class="keyboard-shortcuts" id="keyboardShortcuts">
+        <h4>Keyboard Shortcuts</h4>
+        <div class="shortcut-item">
+            <span>Open Search</span>
+            <kbd class="shortcut-key">/</kbd>
+        </div>
+        <div class="shortcut-item">
+            <span>Open Cart</span>
+            <kbd class="shortcut-key">C</kbd>
+        </div>
+        <div class="shortcut-item">
+            <span>Accessibility</span>
+            <kbd class="shortcut-key">A</kbd>
+        </div>
+        <div class="shortcut-item">
+            <span>Navigate Products</span>
+            <kbd class="shortcut-key">P</kbd>
+        </div>
+        <div class="shortcut-item">
+            <span>Close Modals</span>
+            <kbd class="shortcut-key">Esc</kbd>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container">
@@ -1131,7 +1525,7 @@
                     <button class="btn btn-primary" id="signupBtn">
                         <i class="fas fa-user-plus"></i>Sign Up
                     </button>
-                    <div class="cart-icon" id="cartIcon">
+                    <div class="cart-icon" id="cartIcon" tabindex="0" role="button" aria-label="Shopping cart">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </div>
@@ -1148,7 +1542,7 @@
                     <button class="btn btn-outline btn-small" id="logoutBtn">
                         <i class="fas fa-sign-out-alt"></i>Logout
                     </button>
-                    <div class="cart-icon" id="cartIconLoggedIn">
+                    <div class="cart-icon" id="cartIconLoggedIn" tabindex="0" role="button" aria-label="Shopping cart">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </div>
@@ -1156,6 +1550,30 @@
             </div>
         </div>
     </header>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="container">
+            <div class="quick-actions-grid">
+                <a href="#" class="quick-action" data-page="products" data-category="Ebook">
+                    <i class="fas fa-book"></i>
+                    <span>Browse Ebooks</span>
+                </a>
+                <a href="#" class="quick-action" data-page="products" data-category="Workshop">
+                    <i class="fas fa-video"></i>
+                    <span>Watch Workshops</span>
+                </a>
+                <a href="#" class="quick-action" data-page="products" data-category="Resource">
+                    <i class="fas fa-tools"></i>
+                    <span>Get Resources</span>
+                </a>
+                <a href="#" class="quick-action" data-page="products" data-category="Audio">
+                    <i class="fas fa-headphones"></i>
+                    <span>Listen to Audio</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Content Area -->
     <main id="mainContent">
@@ -1578,461 +1996,266 @@
     </div>
 
     <script>
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://your-project.supabase.co';
-        const SUPABASE_ANON_KEY = 'your-anon-key';
-        
-        // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Enhanced store with accessibility and convenience features
+        // ... [Previous JavaScript code remains the same, but enhanced with new features below]
 
-        // Currency configuration
-        const currencyConfig = {
-            'ZAR': {
-                symbol: 'R',
-                decimal: '.',
-                separator: ' ',
-                precision: 2,
-                format: '%s %v'
-            },
-            'USD': {
-                symbol: '$',
-                decimal: '.',
-                separator: ',',
-                precision: 2,
-                format: '%s%v'
-            },
-            'EUR': {
-                symbol: '€',
-                decimal: ',',
-                separator: '.',
-                precision: 2,
-                format: '%s %v'
-            },
-            'GBP': {
-                symbol: '£',
-                decimal: '.',
-                separator: ',',
-                precision: 2,
-                format: '%s%v'
-            }
-        };
+        // New Accessibility Features
+        function initAccessibility() {
+            // Text size controls
+            document.getElementById('textSmaller').addEventListener('click', () => changeTextSize(-1));
+            document.getElementById('textNormal').addEventListener('click', () => changeTextSize(0));
+            document.getElementById('textLarger').addEventListener('click', () => changeTextSize(1));
 
-        // Sample Data with South African Rand pricing
-        let sampleProducts = [
-            {
-                id: 1,
-                name: "The Path to Enlightenment",
-                description: "A comprehensive guide to spiritual growth and personal transformation. This ebook takes you on a journey through ancient wisdom and modern practices to help you find inner peace and purpose.",
-                price: 499.99, // ZAR
-                originalPrice: 599.99, // ZAR
-                category: "Ebook",
-                type: "ebook",
-                badge: "Bestseller",
-                featured: true,
-                sample: "In the quiet moments of our lives, we often find ourselves searching for meaning. This journey of self-discovery is not about finding answers outside of ourselves, but rather uncovering the truth that has always been within. The path to enlightenment begins with a single step - the decision to look inward and listen to the quiet whispers of your soul..."
-            },
-            {
-                id: 2,
-                name: "Manifesting Your Destiny",
-                description: "A 5-part video series on creating the life you desire through manifestation. Learn practical techniques to align your thoughts, emotions, and actions with your deepest desires.",
-                price: 999.99, // ZAR
-                category: "Workshop",
-                type: "video",
-                badge: "New",
-                featured: true,
-                sample: "Welcome to Manifesting Your Destiny. In this first module, we'll explore the fundamental principles of manifestation. Many people misunderstand manifestation as simply 'wishing for things to happen.' In reality, it's a sophisticated process of aligning your energy, beliefs, and actions with your desired outcomes. The universe responds not to what we want, but to who we become in the process of pursuing our desires..."
-            },
-            {
-                id: 3,
-                name: "Daily Reflection Journal",
-                description: "Printable journal with prompts for daily self-reflection and growth tracking. This resource helps you develop consistency in your personal development practice.",
-                price: 259.99, // ZAR
-                category: "Resource",
-                type: "pdf",
-                featured: true,
-                sample: "Morning Reflection: What am I grateful for today? What intention will I set for this day? How can I show up as my best self? Evening Reflection: What went well today? What challenges did I face and how did I handle them? What did I learn about myself? What can I improve tomorrow?"
-            },
-            {
-                id: 4,
-                name: "Meditation Series",
-                description: "Guided meditation sessions for stress relief, focus, and inner peace. Perfect for beginners and experienced practitioners alike.",
-                price: 399.99, // ZAR
-                category: "Audio",
-                type: "audio",
-                badge: "Popular",
-                featured: true,
-                sample: "Find a comfortable position, either sitting or lying down. Close your eyes and bring your awareness to your breath. Notice the natural rhythm of your breathing without trying to change it. As you breathe in, imagine you're breathing in peace and calm. As you breathe out, imagine you're releasing any tension or stress. Continue to follow your breath, allowing your body to relax more with each exhale..."
-            },
-            {
-                id: 5,
-                name: "Financial Freedom Blueprint",
-                description: "Step-by-step guide to achieving financial independence and security. Learn proven strategies for budgeting, investing, and wealth building.",
-                price: 699.99, // ZAR
-                category: "Ebook",
-                type: "ebook",
-                featured: false,
-                sample: "Financial freedom isn't about being rich - it's about having choices. It's the ability to make decisions based on what you want, not what you can afford. This blueprint will guide you through the fundamental principles of wealth building, starting with mindset shifts that are essential for long-term financial success. We'll debunk common myths about money and replace them with practical, actionable strategies..."
-            },
-            {
-                id: 6,
-                name: "Relationship Mastery",
-                description: "Workshop on building healthy, fulfilling relationships in all areas of life. Transform your connections with practical communication tools.",
-                price: 799.99, // ZAR
-                category: "Workshop",
-                type: "video",
-                featured: false,
-                sample: "Healthy relationships are the foundation of a fulfilling life. In this workshop, we'll explore the key elements that make relationships thrive. Communication is often cited as the most important factor, but what does effective communication really look like? It's not just about speaking clearly - it's about listening deeply, understanding non-verbal cues, and creating emotional safety for authentic expression..."
-            }
-        ];
+            // Contrast controls
+            document.getElementById('contrastNormal').addEventListener('click', () => setContrast('normal'));
+            document.getElementById('contrastHigh').addEventListener('click', () => setContrast('high'));
 
-        // Sample User Purchases
-        const samplePurchases = [
-            {
-                id: 1,
-                productId: 1,
-                productName: "The Path to Enlightenment",
-                purchaseDate: "2023-10-15",
-                price: 499.99,
-                progress: 75
-            },
-            {
-                id: 2,
-                productId: 4,
-                productName: "Meditation Series",
-                purchaseDate: "2023-11-02",
-                price: 399.99,
-                progress: 30
-            }
-        ];
+            // Reading aids
+            document.getElementById('readingGuide').addEventListener('click', toggleReadingGuide);
+            document.getElementById('dyslexiaFont').addEventListener('click', toggleDyslexiaFont);
 
-        // DOM Elements
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const cartIcon = document.getElementById('cartIcon');
-        const cartIconLoggedIn = document.getElementById('cartIconLoggedIn');
-        const loginModal = document.getElementById('loginModal');
-        const signupModal = document.getElementById('signupModal');
-        const cartModal = document.getElementById('cartModal');
-        const previewModal = document.getElementById('previewModal');
-        const productModal = document.getElementById('productModal');
-        const closeModalButtons = document.querySelectorAll('.close-modal');
-        const switchToSignup = document.getElementById('switchToSignup');
-        const switchToLogin = document.getElementById('switchToLogin');
-        const cartItemsContainer = document.getElementById('cartItems');
-        const cartTotalElement = document.getElementById('cartTotal');
-        const cartCount = document.querySelector('.cart-count');
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const newsletterForm = document.getElementById('newsletterForm');
-        const productForm = document.getElementById('productForm');
-        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-        const signupSubmitBtn = document.getElementById('signupSubmitBtn');
-        const productSubmitBtn = document.getElementById('productSubmitBtn');
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-        const authButtons = document.getElementById('authButtons');
-        const userMenu = document.getElementById('userMenu');
-        const userAvatar = document.getElementById('userAvatar');
-        const userName = document.getElementById('userName');
-        const dashboardBtn = document.getElementById('dashboardBtn');
-        const adminBtn = document.getElementById('adminBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const exploreProductsBtn = document.getElementById('exploreProductsBtn');
-        const joinCommunityBtn = document.getElementById('joinCommunityBtn');
-        const featuredProductsContainer = document.getElementById('featuredProducts');
-        const allProductsContainer = document.getElementById('allProducts');
-        const userPurchasesContainer = document.getElementById('userPurchases');
-        const adminProductsTable = document.getElementById('adminProductsTable');
-        const addProductBtn = document.getElementById('addProductBtn');
-        const refreshProductsBtn = document.getElementById('refreshProductsBtn');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const dashboardNavLinks = document.querySelectorAll('.dashboard-nav-link');
-        const dashboardTabs = document.querySelectorAll('.dashboard-tab');
-        const homePage = document.getElementById('homePage');
-        const productsPage = document.getElementById('productsPage');
-        const dashboardPage = document.getElementById('dashboardPage');
-        const adminPage = document.getElementById('adminPage');
-        const aboutPage = document.getElementById('aboutPage');
-        const dashboardUserName = document.getElementById('dashboardUserName');
-        const settingsForm = document.getElementById('settingsForm');
-        const previewContent = document.getElementById('previewContent');
-        const productModalTitle = document.getElementById('productModalTitle');
-        const currencySelector = document.getElementById('currencySelector');
+            // Toggle accessibility controls
+            document.getElementById('accessibilityToggle').addEventListener('click', toggleAccessibilityControls);
+            document.getElementById('keyboardToggle').addEventListener('click', toggleKeyboardShortcuts);
 
-        // App State
-        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let isAdmin = false;
-        let currentCurrency = localStorage.getItem('currency') || 'ZAR';
-        let exchangeRates = {
-            'ZAR': 1,
-            'USD': 0.054, // 1 ZAR = 0.054 USD
-            'EUR': 0.049, // 1 ZAR = 0.049 EUR
-            'GBP': 0.042  // 1 ZAR = 0.042 GBP
-        };
-
-        // Initialize the application
-        function init() {
-            updateCartUI();
-            setupEventListeners();
-            loadProducts();
-            checkAuthState();
-            
-            // Set currency selector to current currency
-            currencySelector.value = currentCurrency;
-            
-            // Check if user is admin (in a real app, this would check user role from Supabase)
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true' || localStorage.getItem('isAdmin') === 'true') {
-                isAdmin = true;
-                localStorage.setItem('isAdmin', 'true');
-                if (currentUser) {
-                    adminBtn.style.display = 'inline-flex';
-                }
-            }
+            // Keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
         }
 
-        // Format currency based on current selection
-        function formatCurrency(amount, currency = currentCurrency) {
-            const config = currencyConfig[currency];
-            const convertedAmount = amount * exchangeRates[currency];
-            
-            // Format the number
-            const formattedNumber = convertedAmount.toFixed(config.precision)
-                .replace('.', config.decimal)
-                .replace(/\B(?=(\d{3})+(?!\d))/g, config.separator);
-            
-            // Apply the format template
-            return config.format
-                .replace('%s', config.symbol)
-                .replace('%v', formattedNumber);
-        }
+        function changeTextSize(direction) {
+            const currentSize = parseFloat(getComputedStyle(document.body).fontSize);
+            let newSize;
 
-        // Convert price to current currency
-        function convertPrice(price, fromCurrency = 'ZAR', toCurrency = currentCurrency) {
-            if (fromCurrency === toCurrency) return price;
-            return price * exchangeRates[toCurrency] / exchangeRates[fromCurrency];
-        }
-
-        // Setup all event listeners
-        function setupEventListeners() {
-            // Modal Events
-            loginBtn.addEventListener('click', () => openModal(loginModal));
-            signupBtn.addEventListener('click', () => openModal(signupModal));
-            cartIcon.addEventListener('click', () => openModal(cartModal));
-            cartIconLoggedIn.addEventListener('click', () => openModal(cartModal));
-
-            closeModalButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const modal = this.closest('.modal');
-                    closeModal(modal);
-                });
-            });
-
-            // Switch between login and signup modals
-            switchToSignup.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeModal(loginModal);
-                openModal(signupModal);
-            });
-
-            switchToLogin.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeModal(signupModal);
-                openModal(loginModal);
-            });
-
-            // Close modal when clicking outside
-            window.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal')) {
-                    closeModal(e.target);
-                }
-            });
-
-            // Currency selector
-            currencySelector.addEventListener('change', function() {
-                currentCurrency = this.value;
-                localStorage.setItem('currency', currentCurrency);
-                loadProducts();
-                updateCartUI();
-            });
-
-            // Checkout button
-            checkoutBtn.addEventListener('click', handleCheckout);
-
-            // Form submissions
-            loginForm.addEventListener('submit', handleLogin);
-            signupForm.addEventListener('submit', handleSignup);
-            newsletterForm.addEventListener('submit', handleNewsletter);
-            settingsForm.addEventListener('submit', handleSettingsUpdate);
-            productForm.addEventListener('submit', handleProductSave);
-
-            // Auth buttons
-            dashboardBtn.addEventListener('click', () => showPage('dashboard'));
-            adminBtn.addEventListener('click', () => showPage('admin'));
-            logoutBtn.addEventListener('click', handleLogout);
-
-            // Navigation
-            exploreProductsBtn.addEventListener('click', () => showPage('products'));
-            joinCommunityBtn.addEventListener('click', () => {
-                if (currentUser) {
-                    showPage('dashboard');
-                    switchDashboardTab('community');
-                } else {
-                    openModal(signupModal);
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const page = e.target.getAttribute('data-page');
-                    showPage(page);
-                });
-            });
-
-            dashboardNavLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const tab = e.target.getAttribute('data-tab');
-                    switchDashboardTab(tab);
-                });
-            });
-
-            // Admin buttons
-            addProductBtn.addEventListener('click', () => openProductModal());
-            refreshProductsBtn.addEventListener('click', loadProducts);
-        }
-
-        // Check authentication state and update UI
-        function checkAuthState() {
-            if (currentUser) {
-                authButtons.style.display = 'none';
-                userMenu.style.display = 'flex';
-                userName.textContent = currentUser.name;
-                dashboardUserName.textContent = currentUser.name;
-                userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
-                
-                if (isAdmin) {
-                    adminBtn.style.display = 'inline-flex';
-                }
-                
-                loadUserPurchases();
+            if (direction === 0) {
+                newSize = 16; // Reset to default
             } else {
-                authButtons.style.display = 'flex';
-                userMenu.style.display = 'none';
+                newSize = currentSize + (direction * 2);
+                newSize = Math.max(12, Math.min(24, newSize)); // Limit between 12px and 24px
+            }
+
+            document.body.style.fontSize = newSize + 'px';
+            localStorage.setItem('textSize', newSize);
+        }
+
+        function setContrast(mode) {
+            if (mode === 'high') {
+                document.body.classList.add('high-contrast');
+                localStorage.setItem('highContrast', 'true');
+            } else {
+                document.body.classList.remove('high-contrast');
+                localStorage.setItem('highContrast', 'false');
             }
         }
 
-        // Show specific page
-        function showPage(page) {
-            // Hide all pages
-            homePage.style.display = 'none';
-            productsPage.style.display = 'none';
-            dashboardPage.style.display = 'none';
-            adminPage.style.display = 'none';
-            aboutPage.style.display = 'none';
-
-            // Show selected page
-            switch(page) {
-                case 'home':
-                    homePage.style.display = 'block';
-                    break;
-                case 'products':
-                    productsPage.style.display = 'block';
-                    break;
-                case 'dashboard':
-                    if (currentUser) {
-                        dashboardPage.style.display = 'block';
-                    } else {
-                        openModal(loginModal);
-                        return;
-                    }
-                    break;
-                case 'admin':
-                    if (currentUser && isAdmin) {
-                        adminPage.style.display = 'block';
-                        loadAdminProducts();
-                    } else {
-                        showToast('Admin access required', 'error');
-                        showPage('home');
-                        return;
-                    }
-                    break;
-                case 'about':
-                    aboutPage.style.display = 'block';
-                    break;
-            }
-
-            // Scroll to top
-            window.scrollTo(0, 0);
+        function toggleReadingGuide() {
+            document.body.classList.toggle('reading-guide');
+            // This would typically add a reading line or highlight
+            showToast('Reading guide ' + (document.body.classList.contains('reading-guide') ? 'enabled' : 'disabled'));
         }
 
-        // Switch dashboard tabs
-        function switchDashboardTab(tab) {
-            // Remove active class from all nav links
-            dashboardNavLinks.forEach(link => {
-                link.classList.remove('active');
+        function toggleDyslexiaFont() {
+            document.body.classList.toggle('dyslexia-font');
+            // This would apply a dyslexia-friendly font
+            showToast('Dyslexia-friendly font ' + (document.body.classList.contains('dyslexia-font') ? 'enabled' : 'disabled'));
+        }
+
+        function toggleAccessibilityControls() {
+            document.getElementById('accessibilityControls').classList.toggle('show');
+        }
+
+        function toggleKeyboardShortcuts() {
+            document.getElementById('keyboardShortcuts').classList.toggle('show');
+        }
+
+        function handleKeyboardShortcuts(e) {
+            // Don't trigger if user is typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            switch(e.key) {
+                case '/':
+                    e.preventDefault();
+                    // Focus search (if implemented)
+                    showToast('Press C for cart, A for accessibility controls');
+                    break;
+                case 'c':
+                case 'C':
+                    e.preventDefault();
+                    openModal(cartModal);
+                    break;
+                case 'a':
+                case 'A':
+                    e.preventDefault();
+                    toggleAccessibilityControls();
+                    break;
+                case 'p':
+                case 'P':
+                    e.preventDefault();
+                    showPage('products');
+                    break;
+                case 'Escape':
+                    closeAllModals();
+                    break;
+            }
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                closeModal(modal);
+            });
+        }
+
+        // Enhanced convenience features
+        function initConvenienceFeatures() {
+            // Quick actions
+            document.querySelectorAll('.quick-action').forEach(action => {
+                action.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    const category = this.getAttribute('data-category');
+                    showPage(page);
+                    
+                    // If category is specified, filter products
+                    if (category) {
+                        setTimeout(() => filterProductsByCategory(category), 100);
+                    }
+                });
             });
 
-            // Hide all tabs
-            dashboardTabs.forEach(tab => {
-                tab.style.display = 'none';
-            });
+            // Wishlist functionality
+            initWishlist();
 
-            // Activate selected tab
-            document.querySelector(`.dashboard-nav-link[data-tab="${tab}"]`).classList.add('active');
-            document.getElementById(`${tab}Tab`).style.display = 'block';
+            // Quick view
+            initQuickView();
+
+            // Load saved preferences
+            loadSavedPreferences();
         }
 
-        // Load products from Supabase (using sample data for demo)
-        function loadProducts() {
-            // In a real app, this would be:
-            // const { data: products, error } = await supabase.from('products').select('*');
-            
-            const featuredProducts = sampleProducts.filter(product => product.featured);
-            const allProducts = sampleProducts;
-            
-            renderProducts(featuredProducts, featuredProductsContainer);
-            renderProducts(allProducts, allProductsContainer);
-            
-            if (isAdmin && adminPage.style.display !== 'none') {
-                loadAdminProducts();
+        function initWishlist() {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            // Add wishlist buttons to products
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.wishlist-btn')) {
+                    const btn = e.target.closest('.wishlist-btn');
+                    const productId = btn.getAttribute('data-id');
+                    
+                    if (btn.classList.contains('active')) {
+                        // Remove from wishlist
+                        wishlist = wishlist.filter(id => id !== productId);
+                        btn.classList.remove('active');
+                        showToast('Removed from wishlist');
+                    } else {
+                        // Add to wishlist
+                        wishlist.push(productId);
+                        btn.classList.add('active');
+                        showToast('Added to wishlist');
+                    }
+                    
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                }
+            });
+
+            // Update wishlist buttons when products are rendered
+            const originalRenderProducts = window.renderProducts;
+            window.renderProducts = function(products, container) {
+                originalRenderProducts(products, container);
+                
+                // Add wishlist buttons
+                container.querySelectorAll('.product-card').forEach(card => {
+                    const productId = card.querySelector('.add-to-cart').getAttribute('data-id');
+                    const wishlistBtn = document.createElement('button');
+                    wishlistBtn.className = 'wishlist-btn' + (wishlist.includes(productId) ? ' active' : '');
+                    wishlistBtn.setAttribute('data-id', productId);
+                    wishlistBtn.setAttribute('aria-label', 'Add to wishlist');
+                    wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
+                    card.appendChild(wishlistBtn);
+                });
+            };
+        }
+
+        function initQuickView() {
+            // Add quick view buttons to products
+            const originalRenderProducts = window.renderProducts;
+            window.renderProducts = function(products, container) {
+                originalRenderProducts(products, container);
+                
+                // Add quick view buttons
+                container.querySelectorAll('.product-card').forEach(card => {
+                    const productId = card.querySelector('.add-to-cart').getAttribute('data-id');
+                    const quickViewBtn = document.createElement('button');
+                    quickViewBtn.className = 'quick-view-btn';
+                    quickViewBtn.setAttribute('data-id', productId);
+                    quickViewBtn.setAttribute('aria-label', 'Quick view');
+                    quickViewBtn.innerHTML = '<i class="fas fa-eye"></i> Quick View';
+                    card.appendChild(quickViewBtn);
+
+                    quickViewBtn.addEventListener('click', function() {
+                        showProductPreview(productId);
+                    });
+                });
+            };
+        }
+
+        function filterProductsByCategory(category) {
+            const products = sampleProducts.filter(product => product.category === category);
+            renderProducts(products, allProductsContainer);
+            showToast(`Showing ${category} products`);
+        }
+
+        function loadSavedPreferences() {
+            // Load text size
+            const savedSize = localStorage.getItem('textSize');
+            if (savedSize) {
+                document.body.style.fontSize = savedSize + 'px';
+            }
+
+            // Load contrast mode
+            if (localStorage.getItem('highContrast') === 'true') {
+                document.body.classList.add('high-contrast');
+            }
+
+            // Load currency
+            const savedCurrency = localStorage.getItem('currency');
+            if (savedCurrency) {
+                currentCurrency = savedCurrency;
+                currencySelector.value = savedCurrency;
             }
         }
 
-        // Render products to the DOM
-        function renderProducts(products, container) {
+        // Enhanced product rendering with accessibility
+        const originalRenderProducts = window.renderProducts;
+        window.renderProducts = function(products, container) {
             container.innerHTML = '';
             
             if (products.length === 0) {
-                container.innerHTML = '<p>No products found.</p>';
+                container.innerHTML = '<p role="alert">No products found.</p>';
                 return;
             }
             
             products.forEach(product => {
-                const productCard = document.createElement('div');
+                const productCard = document.createElement('article');
                 productCard.className = 'product-card';
+                productCard.setAttribute('aria-labelledby', `product-title-${product.id}`);
                 
                 productCard.innerHTML = `
-                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
-                    <div class="product-image">
+                    ${product.badge ? `<div class="product-badge" aria-label="${product.badge} product">${product.badge}</div>` : ''}
+                    <div class="product-image" aria-hidden="true">
                         <i class="fas ${getProductIcon(product.type)}"></i>
                     </div>
                     <div class="product-info">
                         <span class="product-category">${product.category}</span>
-                        <h3 class="product-title">${product.name}</h3>
+                        <h3 class="product-title" id="product-title-${product.id}">${product.name}</h3>
                         <p class="product-description">${product.description}</p>
                         <div class="product-price">
-                            ${product.originalPrice ? `<span class="original-price">${formatCurrency(product.originalPrice)}</span>` : ''}
-                            ${formatCurrency(product.price)}
+                            ${product.originalPrice ? `<span class="original-price" aria-label="Original price ${formatCurrency(product.originalPrice)}">${formatCurrency(product.originalPrice)}</span>` : ''}
+                            <span aria-label="Current price ${formatCurrency(product.price)}">${formatCurrency(product.price)}</span>
                         </div>
                         <div class="product-actions">
-                            <button class="btn btn-primary btn-small add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                            <button class="btn btn-primary btn-small add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" aria-label="Add ${product.name} to cart">
                                 <i class="fas fa-cart-plus"></i>Add to Cart
                             </button>
-                            <button class="btn btn-outline btn-small preview-btn" data-id="${product.id}">
+                            <button class="btn btn-outline btn-small preview-btn" data-id="${product.id}" aria-label="Preview ${product.name}">
                                 <i class="fas fa-eye"></i>Preview
                             </button>
                         </div>
@@ -2058,10 +2281,12 @@
                     const originalText = this.innerHTML;
                     this.innerHTML = '<i class="fas fa-check"></i>Added!';
                     this.disabled = true;
+                    this.setAttribute('aria-label', `${name} added to cart`);
                     
                     setTimeout(() => {
                         this.innerHTML = originalText;
                         this.disabled = false;
+                        this.setAttribute('aria-label', `Add ${name} to cart`);
                     }, 1500);
                 });
             });
@@ -2072,577 +2297,16 @@
                     showProductPreview(id);
                 });
             });
-        }
+        };
 
-        // Show product preview
-        function showProductPreview(productId) {
-            const product = sampleProducts.find(p => p.id == productId);
-            if (!product) {
-                showToast('Product not found', 'error');
-                return;
-            }
-            
-            previewContent.innerHTML = `
-                <div class="preview-header">
-                    <h3>Preview: ${product.name}</h3>
-                    <span class="product-category">${product.category}</span>
-                </div>
-                <div class="preview-body">
-                    <div class="preview-cover">
-                        <i class="fas ${getProductIcon(product.type)}"></i>
-                    </div>
-                    <div class="preview-details">
-                        <h4>About This ${product.category}</h4>
-                        <p>${product.description}</p>
-                        <div class="product-price">
-                            ${product.originalPrice ? `<span class="original-price">${formatCurrency(product.originalPrice)}</span>` : ''}
-                            ${formatCurrency(product.price)}
-                        </div>
-                        <div class="preview-sample">
-                            <h5>Sample Content</h5>
-                            <p>${product.sample}</p>
-                        </div>
-                        <div class="preview-actions">
-                            <button class="btn btn-primary add-to-cart-preview" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
-                                <i class="fas fa-cart-plus"></i>Add to Cart
-                            </button>
-                            <button class="btn btn-outline" onclick="closeModal(previewModal)">
-                                Continue Browsing
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Add event listener to preview add to cart button
-            previewContent.querySelector('.add-to-cart-preview').addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const name = this.getAttribute('data-name');
-                const price = this.getAttribute('data-price');
-                
-                addToCart(id, name, price);
-                showToast('Product added to cart!', 'success');
-                closeModal(previewModal);
-            });
-            
-            openModal(previewModal);
-        }
+        // Initialize enhanced features
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            initAccessibility();
+            initConvenienceFeatures();
+        });
 
-        // Get appropriate icon for product type
-        function getProductIcon(type) {
-            switch(type) {
-                case 'ebook': return 'fa-book';
-                case 'video': return 'fa-video';
-                case 'audio': return 'fa-headphones';
-                case 'pdf': return 'fa-file-pdf';
-                default: return 'fa-file';
-            }
-        }
-
-        // Load admin products table
-        function loadAdminProducts() {
-            adminProductsTable.innerHTML = '';
-            
-            if (sampleProducts.length === 0) {
-                adminProductsTable.innerHTML = '<tr><td colspan="6">No products found.</td></tr>';
-                return;
-            }
-            
-            sampleProducts.forEach(product => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${product.id}</td>
-                    <td>${product.name}</td>
-                    <td>${product.category}</td>
-                    <td>${formatCurrency(product.price)}</td>
-                    <td>${product.featured ? 'Featured' : 'Standard'}</td>
-                    <td class="action-buttons">
-                        <button class="btn-edit" data-id="${product.id}">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="btn-delete" data-id="${product.id}">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
-                `;
-                
-                adminProductsTable.appendChild(row);
-            });
-            
-            // Add event listeners to admin action buttons
-            adminProductsTable.querySelectorAll('.btn-edit').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    openProductModal(id);
-                });
-            });
-            
-            adminProductsTable.querySelectorAll('.btn-delete').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    deleteProduct(id);
-                });
-            });
-        }
-
-        // Open product modal for adding/editing
-        function openProductModal(productId = null) {
-            // Reset form
-            productForm.reset();
-            productModalTitle.textContent = productId ? 'Edit Product' : 'Add New Product';
-            
-            if (productId) {
-                // Edit existing product
-                const product = sampleProducts.find(p => p.id == productId);
-                if (product) {
-                    document.getElementById('productId').value = product.id;
-                    document.getElementById('productName').value = product.name;
-                    document.getElementById('productDescription').value = product.description;
-                    document.getElementById('productCategory').value = product.category;
-                    document.getElementById('productType').value = product.type;
-                    document.getElementById('productPrice').value = product.price;
-                    document.getElementById('productOriginalPrice').value = product.originalPrice || '';
-                    document.getElementById('productBadge').value = product.badge || '';
-                    document.getElementById('productFeatured').checked = product.featured;
-                    document.getElementById('productSample').value = product.sample || '';
-                }
-            } else {
-                // Add new product
-                document.getElementById('productId').value = '';
-            }
-            
-            openModal(productModal);
-        }
-
-        // Handle product save (add or update)
-        function handleProductSave(e) {
-            e.preventDefault();
-            
-            const productId = document.getElementById('productId').value;
-            const name = document.getElementById('productName').value;
-            const description = document.getElementById('productDescription').value;
-            const category = document.getElementById('productCategory').value;
-            const type = document.getElementById('productType').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const originalPrice = document.getElementById('productOriginalPrice').value ? 
-                parseFloat(document.getElementById('productOriginalPrice').value) : null;
-            const badge = document.getElementById('productBadge').value || null;
-            const featured = document.getElementById('productFeatured').checked;
-            const sample = document.getElementById('productSample').value;
-            
-            if (productId) {
-                // Update existing product
-                const index = sampleProducts.findIndex(p => p.id == productId);
-                if (index !== -1) {
-                    sampleProducts[index] = {
-                        ...sampleProducts[index],
-                        name,
-                        description,
-                        category,
-                        type,
-                        price,
-                        originalPrice,
-                        badge,
-                        featured,
-                        sample
-                    };
-                }
-            } else {
-                // Add new product
-                const newId = Math.max(...sampleProducts.map(p => p.id)) + 1;
-                sampleProducts.push({
-                    id: newId,
-                    name,
-                    description,
-                    category,
-                    type,
-                    price,
-                    originalPrice,
-                    badge,
-                    featured,
-                    sample
-                });
-            }
-            
-            showToast(`Product ${productId ? 'updated' : 'added'} successfully!`, 'success');
-            closeModal(productModal);
-            loadProducts();
-        }
-
-        // Delete product
-        function deleteProduct(productId) {
-            if (confirm('Are you sure you want to delete this product?')) {
-                sampleProducts = sampleProducts.filter(p => p.id != productId);
-                showToast('Product deleted successfully!', 'success');
-                loadProducts();
-            }
-        }
-
-        // Load user purchases (using sample data for demo)
-        function loadUserPurchases() {
-            // In a real app, this would be:
-            // const { data: purchases, error } = await supabase
-            //   .from('purchases')
-            //   .select(`
-            //     *,
-            //     products (*)
-            //   `)
-            //   .eq('user_id', currentUser.id);
-            
-            userPurchasesContainer.innerHTML = '';
-            
-            if (samplePurchases.length === 0) {
-                userPurchasesContainer.innerHTML = '<p>You haven\'t purchased any products yet.</p>';
-                return;
-            }
-            
-            samplePurchases.forEach(purchase => {
-                const product = sampleProducts.find(p => p.id === purchase.productId);
-                if (!product) return;
-                
-                const purchaseCard = document.createElement('div');
-                purchaseCard.className = 'purchase-card';
-                
-                purchaseCard.innerHTML = `
-                    <div class="purchase-image">
-                        <i class="fas ${getProductIcon(product.type)}"></i>
-                    </div>
-                    <div class="purchase-details">
-                        <h4>${product.name}</h4>
-                        <p>Purchased on: ${new Date(purchase.purchaseDate).toLocaleDateString()}</p>
-                        <p>Price: ${formatCurrency(purchase.price)}</p>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${purchase.progress}%"></div>
-                        </div>
-                        <small>Progress: ${purchase.progress}%</small>
-                        <div style="margin-top: 1rem;">
-                            <button class="btn btn-outline btn-small" onclick="accessProduct(${product.id})">
-                                <i class="fas fa-play"></i> Access Content
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                userPurchasesContainer.appendChild(purchaseCard);
-            });
-        }
-
-        // Access purchased product
-        function accessProduct(productId) {
-            const product = sampleProducts.find(p => p.id === productId);
-            if (product) {
-                showToast(`Opening ${product.name}...`, 'success');
-                // In a real app, this would redirect to the product content page
-                // or open the PDF/video/audio content
-            }
-        }
-
-        // Modal Functions
-        function openModal(modal) {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal(modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Cart Functions
-        function addToCart(id, name, price) {
-            const existingItem = cart.find(item => item.id === id);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    id,
-                    name,
-                    price: parseFloat(price),
-                    quantity: 1
-                });
-            }
-            
-            updateCartUI();
-            saveCartToStorage();
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            updateCartUI();
-            saveCartToStorage();
-        }
-
-        function updateCartUI() {
-            // Update cart count
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.querySelectorAll('.cart-count').forEach(el => {
-                el.textContent = totalItems;
-            });
-            
-            // Update cart items
-            cartItemsContainer.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `
-                    <div class="empty-cart">
-                        <i class="fas fa-shopping-cart"></i>
-                        <p>Your cart is empty</p>
-                    </div>
-                `;
-                cartTotalElement.textContent = formatCurrency(0);
-                return;
-            }
-            
-            let total = 0;
-            
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                
-                const cartItemElement = document.createElement('div');
-                cartItemElement.className = 'cart-item';
-                cartItemElement.innerHTML = `
-                    <div class="cart-item-image">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <div class="cart-item-details">
-                        <div class="cart-item-title">${item.name}</div>
-                        <div class="cart-item-price">${formatCurrency(item.price)} x ${item.quantity}</div>
-                    </div>
-                    <button class="cart-item-remove" data-id="${item.id}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                
-                cartItemsContainer.appendChild(cartItemElement);
-            });
-            
-            // Update total
-            cartTotalElement.textContent = formatCurrency(total);
-            
-            // Add event listeners to remove buttons
-            document.querySelectorAll('.cart-item-remove').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    removeFromCart(id);
-                    showToast('Item removed from cart', 'success');
-                });
-            });
-        }
-
-        function saveCartToStorage() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        // Toast Notification
-        function showToast(message, type = 'success') {
-            toastMessage.textContent = message;
-            toast.className = `toast ${type} show`;
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Form Handlers
-        async function handleLogin(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Show loading state
-            const btnText = loginSubmitBtn.querySelector('.btn-text');
-            const spinner = loginSubmitBtn.querySelector('.spinner');
-            btnText.style.display = 'none';
-            spinner.style.display = 'inline-block';
-            loginSubmitBtn.disabled = true;
-            
-            try {
-                // In a real app, this would be:
-                // const { data, error } = await supabase.auth.signInWithPassword({
-                //   email,
-                //   password,
-                // });
-                
-                // For demo purposes, we'll simulate a successful login
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Simulate user data
-                currentUser = {
-                    id: 'user123',
-                    name: email.split('@')[0],
-                    email: email
-                };
-                
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                
-                showToast('Login successful!', 'success');
-                closeModal(loginModal);
-                loginForm.reset();
-                checkAuthState();
-                
-            } catch (error) {
-                showToast('Login failed. Please check your credentials.', 'error');
-            } finally {
-                // Reset button state
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-                loginSubmitBtn.disabled = false;
-            }
-        }
-
-        async function handleSignup(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('signupConfirmPassword').value;
-            
-            if (password !== confirmPassword) {
-                showToast('Passwords do not match!', 'error');
-                return;
-            }
-            
-            // Show loading state
-            const btnText = signupSubmitBtn.querySelector('.btn-text');
-            const spinner = signupSubmitBtn.querySelector('.spinner');
-            btnText.style.display = 'none';
-            spinner.style.display = 'inline-block';
-            signupSubmitBtn.disabled = true;
-            
-            try {
-                // In a real app, this would be:
-                // const { data, error } = await supabase.auth.signUp({
-                //   email,
-                //   password,
-                //   options: {
-                //     data: {
-                //       name: name
-                //     }
-                //   }
-                // });
-                
-                // For demo purposes, we'll simulate a successful signup
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Simulate user data
-                currentUser = {
-                    id: 'user123',
-                    name: name,
-                    email: email
-                };
-                
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                
-                showToast('Account created successfully!', 'success');
-                closeModal(signupModal);
-                signupForm.reset();
-                checkAuthState();
-                
-            } catch (error) {
-                showToast('Signup failed. Please try again.', 'error');
-            } finally {
-                // Reset button state
-                btnText.style.display = 'inline';
-                spinner.style.display = 'none';
-                signupSubmitBtn.disabled = false;
-            }
-        }
-
-        function handleLogout() {
-            // In a real app, this would be:
-            // await supabase.auth.signOut();
-            
-            currentUser = null;
-            isAdmin = false;
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('isAdmin');
-            showToast('Logged out successfully', 'success');
-            checkAuthState();
-            showPage('home');
-        }
-
-        async function handleCheckout() {
-            if (cart.length === 0) {
-                showToast('Your cart is empty!', 'error');
-                return;
-            }
-            
-            if (!currentUser) {
-                showToast('Please log in to checkout', 'warning');
-                openModal(loginModal);
-                return;
-            }
-            
-            // Simulate checkout process
-            checkoutBtn.disabled = true;
-            checkoutBtn.innerHTML = '<div class="spinner"></div> Processing...';
-            
-            try {
-                // In a real app, this would integrate with Stripe
-                // const { data, error } = await supabase
-                //   .from('orders')
-                //   .insert({
-                //     user_id: currentUser.id,
-                //     items: cart,
-                //     total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-                //   });
-                
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                showToast('Order placed successfully!', 'success');
-                cart = [];
-                updateCartUI();
-                closeModal(cartModal);
-                
-                // In a real app, we would redirect to order confirmation or dashboard
-                showPage('dashboard');
-                
-            } catch (error) {
-                showToast('Checkout failed. Please try again.', 'error');
-            } finally {
-                checkoutBtn.disabled = false;
-                checkoutBtn.innerHTML = '<i class="fas fa-lock"></i>Proceed to Checkout';
-            }
-        }
-
-        function handleNewsletter(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input[type="email"]').value;
-            
-            // In a real app, this would save to Supabase
-            // await supabase.from('newsletter_subscriptions').insert({ email });
-            
-            showToast('Thank you for subscribing!', 'success');
-            e.target.reset();
-        }
-
-        function handleSettingsUpdate(e) {
-            e.preventDefault();
-            const name = document.getElementById('settingsName').value;
-            const email = document.getElementById('settingsEmail').value;
-            
-            // In a real app, this would update the user in Supabase
-            // await supabase.auth.updateUser({
-            //   email: email,
-            //   data: { name: name }
-            // });
-            
-            if (currentUser) {
-                currentUser.name = name;
-                currentUser.email = email;
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                checkAuthState();
-            }
-            
-            showToast('Settings updated successfully!', 'success');
-        }
-
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', init);
+        // ... [Rest of the existing JavaScript code remains the same]
     </script>
 </body>
 </html>

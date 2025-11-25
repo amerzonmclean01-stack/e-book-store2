@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Definitive Word - Your Destiny Has Been Written</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,6 +16,8 @@
             --dark-blue: #0F1B3A;
             --gray: #F3F4F6;
             --dark-gray: #6B7280;
+            --success: #10B981;
+            --warning: #F59E0B;
         }
 
         * {
@@ -114,6 +117,24 @@
             display: flex;
             gap: 1rem;
             align-items: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--prophetic-blue);
         }
 
         .btn {
@@ -358,6 +379,109 @@
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
             flex: 1;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 2rem 0;
+            background: var(--gray);
+            min-height: 60vh;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .dashboard-sidebar {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .dashboard-nav {
+            list-style: none;
+        }
+
+        .dashboard-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            color: var(--dark-blue);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .dashboard-nav a:hover, .dashboard-nav a.active {
+            background: var(--prophetic-blue);
+            color: var(--white);
+        }
+
+        .dashboard-content {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .purchases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .purchase-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .purchase-image {
+            width: 80px;
+            height: 80px;
+            background: var(--light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            color: var(--prophetic-blue);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .purchase-details {
+            flex: 1;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gold);
+            border-radius: 4px;
         }
 
         /* Features Section */
@@ -718,11 +842,15 @@
         }
 
         .toast.success {
-            background: #10B981;
+            background: var(--success);
         }
 
         .toast.error {
             background: var(--red);
+        }
+
+        .toast.warning {
+            background: var(--warning);
         }
 
         /* Loading Spinner */
@@ -780,6 +908,18 @@
             .cart-item-image {
                 margin-right: 0;
             }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-sidebar {
+                order: 2;
+            }
+
+            .dashboard-content {
+                order: 1;
+            }
         }
 
         @media (max-width: 480px) {
@@ -808,14 +948,14 @@
                 </a>
                 <nav>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Ebooks</a></li>
-                        <li><a href="#">Workshops</a></li>
-                        <li><a href="#">Resources</a></li>
-                        <li><a href="#">About</a></li>
+                        <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                        <li><a href="#" class="nav-link" data-page="products">Ebooks</a></li>
+                        <li><a href="#" class="nav-link" data-page="products">Workshops</a></li>
+                        <li><a href="#" class="nav-link" data-page="products">Resources</a></li>
+                        <li><a href="#" class="nav-link" data-page="about">About</a></li>
                     </ul>
                 </nav>
-                <div class="auth-buttons">
+                <div class="auth-buttons" id="authButtons">
                     <button class="btn btn-outline" id="loginBtn">
                         <i class="fas fa-sign-in-alt"></i>Login
                     </button>
@@ -827,160 +967,190 @@
                         <span class="cart-count">0</span>
                     </div>
                 </div>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span id="userName">User</span>
+                    <button class="btn btn-outline btn-small" id="dashboardBtn">
+                        <i class="fas fa-tachometer-alt"></i>Dashboard
+                    </button>
+                    <button class="btn btn-outline btn-small" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>Logout
+                    </button>
+                    <div class="cart-icon" id="cartIconLoggedIn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h2>Your Destiny Has Been Written</h2>
-                <p>Discover transformative ebooks, workshops, and resources to unlock your potential and shape your future.</p>
-                <div class="hero-buttons">
-                    <button class="btn btn-gold">
-                        <i class="fas fa-book"></i>Explore Our Collection
-                    </button>
-                    <button class="btn btn-outline">
-                        <i class="fas fa-users"></i>Join Our Community
-                    </button>
+    <!-- Main Content Area -->
+    <main id="mainContent">
+        <!-- Home Page -->
+        <section id="homePage">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h2>Your Destiny Has Been Written</h2>
+                        <p>Discover transformative ebooks, workshops, and resources to unlock your potential and shape your future.</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-gold" id="exploreProductsBtn">
+                                <i class="fas fa-book"></i>Explore Our Collection
+                            </button>
+                            <button class="btn btn-outline" id="joinCommunityBtn">
+                                <i class="fas fa-users"></i>Join Our Community
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- Featured Products -->
-    <section class="container">
-        <h2 class="section-title">Featured Products</h2>
-        <div class="products-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="product-badge">Bestseller</div>
-                <div class="product-image">
-                    <i class="fas fa-book"></i>
+            <!-- Featured Products -->
+            <section class="container">
+                <h2 class="section-title">Featured Products</h2>
+                <div class="products-grid" id="featuredProducts">
+                    <!-- Products will be loaded dynamically -->
                 </div>
-                <div class="product-info">
-                    <span class="product-category">Ebook</span>
-                    <h3 class="product-title">The Path to Enlightenment</h3>
-                    <p class="product-description">A comprehensive guide to spiritual growth and personal transformation.</p>
-                    <div class="product-price">
-                        <span class="original-price">$29.99</span>
-                        $24.99
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary btn-small add-to-cart" data-id="1" data-name="The Path to Enlightenment" data-price="24.99">
-                            <i class="fas fa-cart-plus"></i>Add to Cart
-                        </button>
-                        <button class="btn btn-outline btn-small preview-btn" data-id="1">
-                            <i class="fas fa-eye"></i>Preview
-                        </button>
-                    </div>
-                </div>
-            </div>
+            </section>
 
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="product-badge">New</div>
-                <div class="product-image">
-                    <i class="fas fa-video"></i>
-                </div>
-                <div class="product-info">
-                    <span class="product-category">Workshop</span>
-                    <h3 class="product-title">Manifesting Your Destiny</h3>
-                    <p class="product-description">A 5-part video series on creating the life you desire through manifestation.</p>
-                    <div class="product-price">$49.99</div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary btn-small add-to-cart" data-id="2" data-name="Manifesting Your Destiny" data-price="49.99">
-                            <i class="fas fa-cart-plus"></i>Add to Cart
-                        </button>
-                        <button class="btn btn-outline btn-small preview-btn" data-id="2">
-                            <i class="fas fa-eye"></i>Preview
-                        </button>
+            <!-- Features Section -->
+            <section class="features">
+                <div class="container">
+                    <h2 class="section-title">Why Choose The Definitive Word?</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3 class="feature-title">Secure Platform</h3>
+                            <p>Your data and purchases are protected with enterprise-grade security.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3 class="feature-title">Access Anywhere</h3>
+                            <p>Enjoy our content on any device, online or offline.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3 class="feature-title">Expert Content</h3>
+                            <p>All materials are created by leading experts in personal development.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="feature-title">Community Support</h3>
+                            <p>Join our community of like-minded individuals on the same journey.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+        </section>
 
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <i class="fas fa-tools"></i>
-                </div>
-                <div class="product-info">
-                    <span class="product-category">Resource</span>
-                    <h3 class="product-title">Daily Reflection Journal</h3>
-                    <p class="product-description">Printable journal with prompts for daily self-reflection and growth tracking.</p>
-                    <div class="product-price">$12.99</div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary btn-small add-to-cart" data-id="3" data-name="Daily Reflection Journal" data-price="12.99">
-                            <i class="fas fa-cart-plus"></i>Add to Cart
-                        </button>
-                        <button class="btn btn-outline btn-small preview-btn" data-id="3">
-                            <i class="fas fa-eye"></i>Preview
-                        </button>
-                    </div>
+        <!-- Products Page -->
+        <section id="productsPage" style="display: none;">
+            <div class="container" style="padding: 2rem 0;">
+                <h2 class="section-title">Our Products</h2>
+                <div class="products-grid" id="allProducts">
+                    <!-- All products will be loaded dynamically -->
                 </div>
             </div>
+        </section>
 
-            <!-- Product 4 -->
-            <div class="product-card">
-                <div class="product-badge">Popular</div>
-                <div class="product-image">
-                    <i class="fas fa-headphones"></i>
-                </div>
-                <div class="product-info">
-                    <span class="product-category">Audio</span>
-                    <h3 class="product-title">Meditation Series</h3>
-                    <p class="product-description">Guided meditation sessions for stress relief, focus, and inner peace.</p>
-                    <div class="product-price">$19.99</div>
-                    <div class="product-actions">
-                        <button class="btn btn-primary btn-small add-to-cart" data-id="4" data-name="Meditation Series" data-price="19.99">
-                            <i class="fas fa-cart-plus"></i>Add to Cart
-                        </button>
-                        <button class="btn btn-outline btn-small preview-btn" data-id="4">
-                            <i class="fas fa-eye"></i>Preview
-                        </button>
+        <!-- Dashboard Page -->
+        <section id="dashboardPage" style="display: none;">
+            <div class="dashboard">
+                <div class="container">
+                    <div class="dashboard-header">
+                        <h2 class="section-title">My Dashboard</h2>
+                        <div class="user-info">
+                            <span>Welcome back, <span id="dashboardUserName">User</span>!</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-sidebar">
+                            <ul class="dashboard-nav">
+                                <li><a href="#" class="dashboard-nav-link active" data-tab="purchases"><i class="fas fa-shopping-bag"></i> My Purchases</a></li>
+                                <li><a href="#" class="dashboard-nav-link" data-tab="progress"><i class="fas fa-chart-line"></i> Progress Tracking</a></li>
+                                <li><a href="#" class="dashboard-nav-link" data-tab="community"><i class="fas fa-users"></i> Community</a></li>
+                                <li><a href="#" class="dashboard-nav-link" data-tab="settings"><i class="fas fa-cog"></i> Account Settings</a></li>
+                            </ul>
+                        </div>
+                        <div class="dashboard-content">
+                            <div id="purchasesTab" class="dashboard-tab">
+                                <h3>My Purchases</h3>
+                                <div class="purchases-grid" id="userPurchases">
+                                    <!-- Purchases will be loaded dynamically -->
+                                </div>
+                            </div>
+                            <div id="progressTab" class="dashboard-tab" style="display: none;">
+                                <h3>Progress Tracking</h3>
+                                <p>Track your learning progress across all purchased content.</p>
+                                <div id="progressContent">
+                                    <!-- Progress content will be loaded dynamically -->
+                                </div>
+                            </div>
+                            <div id="communityTab" class="dashboard-tab" style="display: none;">
+                                <h3>Community</h3>
+                                <p>Connect with other learners and share insights.</p>
+                                <div id="communityContent">
+                                    <!-- Community content will be loaded dynamically -->
+                                </div>
+                            </div>
+                            <div id="settingsTab" class="dashboard-tab" style="display: none;">
+                                <h3>Account Settings</h3>
+                                <form id="settingsForm">
+                                    <div class="form-group">
+                                        <label for="settingsName">Full Name</label>
+                                        <input type="text" id="settingsName" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="settingsEmail">Email Address</label>
+                                        <input type="email" id="settingsEmail" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="settingsPassword">New Password</label>
+                                        <input type="password" id="settingsPassword" class="form-control">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Settings</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">Why Choose The Definitive Word?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Secure Platform</h3>
-                    <p>Your data and purchases are protected with enterprise-grade security.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Access Anywhere</h3>
-                    <p>Enjoy our content on any device, online or offline.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3 class="feature-title">Expert Content</h3>
-                    <p>All materials are created by leading experts in personal development.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="feature-title">Community Support</h3>
-                    <p>Join our community of like-minded individuals on the same journey.</p>
+        <!-- About Page -->
+        <section id="aboutPage" style="display: none;">
+            <div class="container" style="padding: 2rem 0;">
+                <h2 class="section-title">About The Definitive Word</h2>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">
+                        The Definitive Word is a transformative platform dedicated to helping individuals unlock their potential 
+                        and shape their destiny through carefully curated ebooks, workshops, and resources.
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        Our mission is to provide high-quality content that inspires growth, fosters self-discovery, 
+                        and empowers our community to create the lives they envision.
+                    </p>
+                    <h3 style="color: var(--prophetic-blue); margin: 2rem 0 1rem;">Our Values</h3>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 2rem;">
+                        <li>Authenticity in all our content and interactions</li>
+                        <li>Excellence in the quality of our products</li>
+                        <li>Community support and collaboration</li>
+                        <li>Continuous growth and learning</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -999,11 +1169,11 @@
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i>Home</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i>Ebooks</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i>Workshops</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i>Resources</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i>About Us</a></li>
+                        <li><a href="#" class="nav-link" data-page="home"><i class="fas fa-chevron-right"></i>Home</a></li>
+                        <li><a href="#" class="nav-link" data-page="products"><i class="fas fa-chevron-right"></i>Ebooks</a></li>
+                        <li><a href="#" class="nav-link" data-page="products"><i class="fas fa-chevron-right"></i>Workshops</a></li>
+                        <li><a href="#" class="nav-link" data-page="products"><i class="fas fa-chevron-right"></i>Resources</a></li>
+                        <li><a href="#" class="nav-link" data-page="about"><i class="fas fa-chevron-right"></i>About Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -1116,18 +1286,106 @@
     </div>
 
     <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://your-project.supabase.co';
+        const SUPABASE_ANON_KEY = 'your-anon-key';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Sample Data (In a real app, this would come from Supabase)
+        const sampleProducts = [
+            {
+                id: 1,
+                name: "The Path to Enlightenment",
+                description: "A comprehensive guide to spiritual growth and personal transformation.",
+                price: 24.99,
+                originalPrice: 29.99,
+                category: "Ebook",
+                type: "ebook",
+                badge: "Bestseller",
+                featured: true
+            },
+            {
+                id: 2,
+                name: "Manifesting Your Destiny",
+                description: "A 5-part video series on creating the life you desire through manifestation.",
+                price: 49.99,
+                category: "Workshop",
+                type: "video",
+                badge: "New",
+                featured: true
+            },
+            {
+                id: 3,
+                name: "Daily Reflection Journal",
+                description: "Printable journal with prompts for daily self-reflection and growth tracking.",
+                price: 12.99,
+                category: "Resource",
+                type: "pdf",
+                featured: true
+            },
+            {
+                id: 4,
+                name: "Meditation Series",
+                description: "Guided meditation sessions for stress relief, focus, and inner peace.",
+                price: 19.99,
+                category: "Audio",
+                type: "audio",
+                badge: "Popular",
+                featured: true
+            },
+            {
+                id: 5,
+                name: "Financial Freedom Blueprint",
+                description: "Step-by-step guide to achieving financial independence and security.",
+                price: 34.99,
+                category: "Ebook",
+                type: "ebook",
+                featured: false
+            },
+            {
+                id: 6,
+                name: "Relationship Mastery",
+                description: "Workshop on building healthy, fulfilling relationships in all areas of life.",
+                price: 39.99,
+                category: "Workshop",
+                type: "video",
+                featured: false
+            }
+        ];
+
+        // Sample User Purchases
+        const samplePurchases = [
+            {
+                id: 1,
+                productId: 1,
+                productName: "The Path to Enlightenment",
+                purchaseDate: "2023-10-15",
+                price: 24.99,
+                progress: 75
+            },
+            {
+                id: 2,
+                productId: 4,
+                productName: "Meditation Series",
+                purchaseDate: "2023-11-02",
+                price: 19.99,
+                progress: 30
+            }
+        ];
+
         // DOM Elements
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
         const cartIcon = document.getElementById('cartIcon');
+        const cartIconLoggedIn = document.getElementById('cartIconLoggedIn');
         const loginModal = document.getElementById('loginModal');
         const signupModal = document.getElementById('signupModal');
         const cartModal = document.getElementById('cartModal');
         const closeModalButtons = document.querySelectorAll('.close-modal');
         const switchToSignup = document.getElementById('switchToSignup');
         const switchToLogin = document.getElementById('switchToLogin');
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const previewButtons = document.querySelectorAll('.preview-btn');
         const cartItemsContainer = document.getElementById('cartItems');
         const cartTotalElement = document.getElementById('cartTotal');
         const cartCount = document.querySelector('.cart-count');
@@ -1139,14 +1397,37 @@
         const signupSubmitBtn = document.getElementById('signupSubmitBtn');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
+        const authButtons = document.getElementById('authButtons');
+        const userMenu = document.getElementById('userMenu');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const dashboardBtn = document.getElementById('dashboardBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const exploreProductsBtn = document.getElementById('exploreProductsBtn');
+        const joinCommunityBtn = document.getElementById('joinCommunityBtn');
+        const featuredProductsContainer = document.getElementById('featuredProducts');
+        const allProductsContainer = document.getElementById('allProducts');
+        const userPurchasesContainer = document.getElementById('userPurchases');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const dashboardNavLinks = document.querySelectorAll('.dashboard-nav-link');
+        const dashboardTabs = document.querySelectorAll('.dashboard-tab');
+        const homePage = document.getElementById('homePage');
+        const productsPage = document.getElementById('productsPage');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const aboutPage = document.getElementById('aboutPage');
+        const dashboardUserName = document.getElementById('dashboardUserName');
+        const settingsForm = document.getElementById('settingsForm');
 
-        // Cart state
+        // App State
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         // Initialize the application
         function init() {
             updateCartUI();
             setupEventListeners();
+            loadProducts();
+            checkAuthState();
         }
 
         // Setup all event listeners
@@ -1155,6 +1436,7 @@
             loginBtn.addEventListener('click', () => openModal(loginModal));
             signupBtn.addEventListener('click', () => openModal(signupModal));
             cartIcon.addEventListener('click', () => openModal(cartModal));
+            cartIconLoggedIn.addEventListener('click', () => openModal(cartModal));
 
             closeModalButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1183,8 +1465,161 @@
                 }
             });
 
-            // Add to cart event listeners
-            addToCartButtons.forEach(button => {
+            // Checkout button
+            checkoutBtn.addEventListener('click', handleCheckout);
+
+            // Form submissions
+            loginForm.addEventListener('submit', handleLogin);
+            signupForm.addEventListener('submit', handleSignup);
+            newsletterForm.addEventListener('submit', handleNewsletter);
+            settingsForm.addEventListener('submit', handleSettingsUpdate);
+
+            // Auth buttons
+            dashboardBtn.addEventListener('click', () => showPage('dashboard'));
+            logoutBtn.addEventListener('click', handleLogout);
+
+            // Navigation
+            exploreProductsBtn.addEventListener('click', () => showPage('products'));
+            joinCommunityBtn.addEventListener('click', () => {
+                if (currentUser) {
+                    showPage('dashboard');
+                    switchDashboardTab('community');
+                } else {
+                    openModal(signupModal);
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = e.target.getAttribute('data-page');
+                    showPage(page);
+                });
+            });
+
+            dashboardNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tab = e.target.getAttribute('data-tab');
+                    switchDashboardTab(tab);
+                });
+            });
+        }
+
+        // Check authentication state and update UI
+        function checkAuthState() {
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = currentUser.name;
+                dashboardUserName.textContent = currentUser.name;
+                userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+                loadUserPurchases();
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // Show specific page
+        function showPage(page) {
+            // Hide all pages
+            homePage.style.display = 'none';
+            productsPage.style.display = 'none';
+            dashboardPage.style.display = 'none';
+            aboutPage.style.display = 'none';
+
+            // Show selected page
+            switch(page) {
+                case 'home':
+                    homePage.style.display = 'block';
+                    break;
+                case 'products':
+                    productsPage.style.display = 'block';
+                    break;
+                case 'dashboard':
+                    if (currentUser) {
+                        dashboardPage.style.display = 'block';
+                    } else {
+                        openModal(loginModal);
+                        return;
+                    }
+                    break;
+                case 'about':
+                    aboutPage.style.display = 'block';
+                    break;
+            }
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Switch dashboard tabs
+        function switchDashboardTab(tab) {
+            // Remove active class from all nav links
+            dashboardNavLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Hide all tabs
+            dashboardTabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            // Activate selected tab
+            document.querySelector(`.dashboard-nav-link[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(`${tab}Tab`).style.display = 'block';
+        }
+
+        // Load products from Supabase (using sample data for demo)
+        function loadProducts() {
+            // In a real app, this would be:
+            // const { data: products, error } = await supabase.from('products').select('*');
+            
+            const featuredProducts = sampleProducts.filter(product => product.featured);
+            const allProducts = sampleProducts;
+            
+            renderProducts(featuredProducts, featuredProductsContainer);
+            renderProducts(allProducts, allProductsContainer);
+        }
+
+        // Render products to the DOM
+        function renderProducts(products, container) {
+            container.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                productCard.innerHTML = `
+                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    <div class="product-image">
+                        <i class="fas ${getProductIcon(product.type)}"></i>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">${product.category}</span>
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-price">
+                            ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
+                            $${product.price.toFixed(2)}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                                <i class="fas fa-cart-plus"></i>Add to Cart
+                            </button>
+                            <button class="btn btn-outline btn-small preview-btn" data-id="${product.id}">
+                                <i class="fas fa-eye"></i>Preview
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(productCard);
+            });
+            
+            // Add event listeners to new buttons
+            container.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function() {
                     const id = this.getAttribute('data-id');
                     const name = this.getAttribute('data-name');
@@ -1206,40 +1641,65 @@
                     }, 1500);
                 });
             });
-
-            // Preview buttons
-            previewButtons.forEach(button => {
+            
+            container.querySelectorAll('.preview-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const id = this.getAttribute('data-id');
                     showToast('Preview feature coming soon!', 'success');
                 });
             });
+        }
 
-            // Checkout button
-            checkoutBtn.addEventListener('click', () => {
-                if (cart.length === 0) {
-                    showToast('Your cart is empty!', 'error');
-                    return;
-                }
+        // Get appropriate icon for product type
+        function getProductIcon(type) {
+            switch(type) {
+                case 'ebook': return 'fa-book';
+                case 'video': return 'fa-video';
+                case 'audio': return 'fa-headphones';
+                case 'pdf': return 'fa-file-pdf';
+                default: return 'fa-file';
+            }
+        }
+
+        // Load user purchases (using sample data for demo)
+        function loadUserPurchases() {
+            // In a real app, this would be:
+            // const { data: purchases, error } = await supabase
+            //   .from('purchases')
+            //   .select(`
+            //     *,
+            //     products (*)
+            //   `)
+            //   .eq('user_id', currentUser.id);
+            
+            userPurchasesContainer.innerHTML = '';
+            
+            if (samplePurchases.length === 0) {
+                userPurchasesContainer.innerHTML = '<p>You haven\'t purchased any products yet.</p>';
+                return;
+            }
+            
+            samplePurchases.forEach(purchase => {
+                const purchaseCard = document.createElement('div');
+                purchaseCard.className = 'purchase-card';
                 
-                // Simulate checkout process
-                checkoutBtn.disabled = true;
-                checkoutBtn.innerHTML = '<div class="spinner"></div> Processing...';
+                purchaseCard.innerHTML = `
+                    <div class="purchase-image">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="purchase-details">
+                        <h4>${purchase.productName}</h4>
+                        <p>Purchased on: ${new Date(purchase.purchaseDate).toLocaleDateString()}</p>
+                        <p>Price: $${purchase.price.toFixed(2)}</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${purchase.progress}%"></div>
+                        </div>
+                        <small>Progress: ${purchase.progress}%</small>
+                    </div>
+                `;
                 
-                setTimeout(() => {
-                    showToast('Order placed successfully!', 'success');
-                    cart = [];
-                    updateCartUI();
-                    closeModal(cartModal);
-                    checkoutBtn.disabled = false;
-                    checkoutBtn.innerHTML = '<i class="fas fa-lock"></i>Proceed to Checkout';
-                }, 2000);
+                userPurchasesContainer.appendChild(purchaseCard);
             });
-
-            // Form submissions
-            loginForm.addEventListener('submit', handleLogin);
-            signupForm.addEventListener('submit', handleSignup);
-            newsletterForm.addEventListener('submit', handleNewsletter);
         }
 
         // Modal Functions
@@ -1281,7 +1741,9 @@
         function updateCartUI() {
             // Update cart count
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
+            document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = totalItems;
+            });
             
             // Update cart items
             cartItemsContainer.innerHTML = '';
@@ -1349,7 +1811,7 @@
         }
 
         // Form Handlers
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             
             const email = document.getElementById('loginEmail').value;
@@ -1362,20 +1824,41 @@
             spinner.style.display = 'inline-block';
             loginSubmitBtn.disabled = true;
             
-            // Simulate API call
-            setTimeout(() => {
+            try {
+                // In a real app, this would be:
+                // const { data, error } = await supabase.auth.signInWithPassword({
+                //   email,
+                //   password,
+                // });
+                
+                // For demo purposes, we'll simulate a successful login
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Simulate user data
+                currentUser = {
+                    id: 'user123',
+                    name: email.split('@')[0],
+                    email: email
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
                 showToast('Login successful!', 'success');
                 closeModal(loginModal);
                 loginForm.reset();
+                checkAuthState();
                 
+            } catch (error) {
+                showToast('Login failed. Please check your credentials.', 'error');
+            } finally {
                 // Reset button state
                 btnText.style.display = 'inline';
                 spinner.style.display = 'none';
                 loginSubmitBtn.disabled = false;
-            }, 1500);
+            }
         }
 
-        function handleSignup(e) {
+        async function handleSignup(e) {
             e.preventDefault();
             
             const name = document.getElementById('signupName').value;
@@ -1395,24 +1878,130 @@
             spinner.style.display = 'inline-block';
             signupSubmitBtn.disabled = true;
             
-            // Simulate API call
-            setTimeout(() => {
+            try {
+                // In a real app, this would be:
+                // const { data, error } = await supabase.auth.signUp({
+                //   email,
+                //   password,
+                //   options: {
+                //     data: {
+                //       name: name
+                //     }
+                //   }
+                // });
+                
+                // For demo purposes, we'll simulate a successful signup
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Simulate user data
+                currentUser = {
+                    id: 'user123',
+                    name: name,
+                    email: email
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
                 showToast('Account created successfully!', 'success');
                 closeModal(signupModal);
                 signupForm.reset();
+                checkAuthState();
                 
+            } catch (error) {
+                showToast('Signup failed. Please try again.', 'error');
+            } finally {
                 // Reset button state
                 btnText.style.display = 'inline';
                 spinner.style.display = 'none';
                 signupSubmitBtn.disabled = false;
-            }, 1500);
+            }
+        }
+
+        function handleLogout() {
+            // In a real app, this would be:
+            // await supabase.auth.signOut();
+            
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            showToast('Logged out successfully', 'success');
+            checkAuthState();
+            showPage('home');
+        }
+
+        async function handleCheckout() {
+            if (cart.length === 0) {
+                showToast('Your cart is empty!', 'error');
+                return;
+            }
+            
+            if (!currentUser) {
+                showToast('Please log in to checkout', 'warning');
+                openModal(loginModal);
+                return;
+            }
+            
+            // Simulate checkout process
+            checkoutBtn.disabled = true;
+            checkoutBtn.innerHTML = '<div class="spinner"></div> Processing...';
+            
+            try {
+                // In a real app, this would integrate with Stripe
+                // const { data, error } = await supabase
+                //   .from('orders')
+                //   .insert({
+                //     user_id: currentUser.id,
+                //     items: cart,
+                //     total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                //   });
+                
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                showToast('Order placed successfully!', 'success');
+                cart = [];
+                updateCartUI();
+                closeModal(cartModal);
+                
+                // In a real app, we would redirect to order confirmation or dashboard
+                showPage('dashboard');
+                
+            } catch (error) {
+                showToast('Checkout failed. Please try again.', 'error');
+            } finally {
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerHTML = '<i class="fas fa-lock"></i>Proceed to Checkout';
+            }
         }
 
         function handleNewsletter(e) {
             e.preventDefault();
             const email = e.target.querySelector('input[type="email"]').value;
+            
+            // In a real app, this would save to Supabase
+            // await supabase.from('newsletter_subscriptions').insert({ email });
+            
             showToast('Thank you for subscribing!', 'success');
             e.target.reset();
+        }
+
+        function handleSettingsUpdate(e) {
+            e.preventDefault();
+            const name = document.getElementById('settingsName').value;
+            const email = document.getElementById('settingsEmail').value;
+            
+            // In a real app, this would update the user in Supabase
+            // await supabase.auth.updateUser({
+            //   email: email,
+            //   data: { name: name }
+            // });
+            
+            if (currentUser) {
+                currentUser.name = name;
+                currentUser.email = email;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                checkAuthState();
+            }
+            
+            showToast('Settings updated successfully!', 'success');
         }
 
         // Initialize the app

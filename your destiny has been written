@@ -80,6 +80,27 @@
             color: var(--gold);
         }
 
+        .currency-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            color: var(--white);
+        }
+
+        .currency-selector select {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--white);
+            padding: 0.3rem;
+            border-radius: 4px;
+        }
+
+        .currency-selector option {
+            background: var(--prophetic-blue);
+            color: var(--white);
+        }
+
         nav ul {
             display: flex;
             list-style: none;
@@ -1054,6 +1075,11 @@
             .admin-actions {
                 flex-direction: column;
             }
+
+            .currency-selector {
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1090,6 +1116,15 @@
                     </ul>
                 </nav>
                 <div class="auth-buttons" id="authButtons">
+                    <div class="currency-selector">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <select id="currencySelector">
+                            <option value="ZAR">ZAR (R)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                        </select>
+                    </div>
                     <button class="btn btn-outline" id="loginBtn">
                         <i class="fas fa-sign-in-alt"></i>Login
                     </button>
@@ -1448,7 +1483,7 @@
             </div>
             <div class="cart-total">
                 <span>Total:</span>
-                <span id="cartTotal">$0.00</span>
+                <span id="cartTotal">R 0.00</span>
             </div>
             <button class="btn btn-primary" style="width: 100%;" id="checkoutBtn">
                 <i class="fas fa-lock"></i>Proceed to Checkout
@@ -1502,11 +1537,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="productPrice">Price ($)</label>
+                    <label for="productPrice">Price (ZAR)</label>
                     <input type="number" id="productPrice" class="form-control" step="0.01" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="productOriginalPrice">Original Price ($) - Leave empty if no discount</label>
+                    <label for="productOriginalPrice">Original Price (ZAR) - Leave empty if no discount</label>
                     <input type="number" id="productOriginalPrice" class="form-control" step="0.01" min="0">
                 </div>
                 <div class="form-group">
@@ -1550,14 +1585,46 @@
         // Initialize Supabase client
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Sample Data (In a real app, this would come from Supabase)
+        // Currency configuration
+        const currencyConfig = {
+            'ZAR': {
+                symbol: 'R',
+                decimal: '.',
+                separator: ' ',
+                precision: 2,
+                format: '%s %v'
+            },
+            'USD': {
+                symbol: '$',
+                decimal: '.',
+                separator: ',',
+                precision: 2,
+                format: '%s%v'
+            },
+            'EUR': {
+                symbol: '€',
+                decimal: ',',
+                separator: '.',
+                precision: 2,
+                format: '%s %v'
+            },
+            'GBP': {
+                symbol: '£',
+                decimal: '.',
+                separator: ',',
+                precision: 2,
+                format: '%s%v'
+            }
+        };
+
+        // Sample Data with South African Rand pricing
         let sampleProducts = [
             {
                 id: 1,
                 name: "The Path to Enlightenment",
                 description: "A comprehensive guide to spiritual growth and personal transformation. This ebook takes you on a journey through ancient wisdom and modern practices to help you find inner peace and purpose.",
-                price: 24.99,
-                originalPrice: 29.99,
+                price: 499.99, // ZAR
+                originalPrice: 599.99, // ZAR
                 category: "Ebook",
                 type: "ebook",
                 badge: "Bestseller",
@@ -1568,7 +1635,7 @@
                 id: 2,
                 name: "Manifesting Your Destiny",
                 description: "A 5-part video series on creating the life you desire through manifestation. Learn practical techniques to align your thoughts, emotions, and actions with your deepest desires.",
-                price: 49.99,
+                price: 999.99, // ZAR
                 category: "Workshop",
                 type: "video",
                 badge: "New",
@@ -1579,7 +1646,7 @@
                 id: 3,
                 name: "Daily Reflection Journal",
                 description: "Printable journal with prompts for daily self-reflection and growth tracking. This resource helps you develop consistency in your personal development practice.",
-                price: 12.99,
+                price: 259.99, // ZAR
                 category: "Resource",
                 type: "pdf",
                 featured: true,
@@ -1589,7 +1656,7 @@
                 id: 4,
                 name: "Meditation Series",
                 description: "Guided meditation sessions for stress relief, focus, and inner peace. Perfect for beginners and experienced practitioners alike.",
-                price: 19.99,
+                price: 399.99, // ZAR
                 category: "Audio",
                 type: "audio",
                 badge: "Popular",
@@ -1600,7 +1667,7 @@
                 id: 5,
                 name: "Financial Freedom Blueprint",
                 description: "Step-by-step guide to achieving financial independence and security. Learn proven strategies for budgeting, investing, and wealth building.",
-                price: 34.99,
+                price: 699.99, // ZAR
                 category: "Ebook",
                 type: "ebook",
                 featured: false,
@@ -1610,7 +1677,7 @@
                 id: 6,
                 name: "Relationship Mastery",
                 description: "Workshop on building healthy, fulfilling relationships in all areas of life. Transform your connections with practical communication tools.",
-                price: 39.99,
+                price: 799.99, // ZAR
                 category: "Workshop",
                 type: "video",
                 featured: false,
@@ -1625,7 +1692,7 @@
                 productId: 1,
                 productName: "The Path to Enlightenment",
                 purchaseDate: "2023-10-15",
-                price: 24.99,
+                price: 499.99,
                 progress: 75
             },
             {
@@ -1633,7 +1700,7 @@
                 productId: 4,
                 productName: "Meditation Series",
                 purchaseDate: "2023-11-02",
-                price: 19.99,
+                price: 399.99,
                 progress: 30
             }
         ];
@@ -1691,11 +1758,19 @@
         const settingsForm = document.getElementById('settingsForm');
         const previewContent = document.getElementById('previewContent');
         const productModalTitle = document.getElementById('productModalTitle');
+        const currencySelector = document.getElementById('currencySelector');
 
         // App State
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let isAdmin = false;
+        let currentCurrency = localStorage.getItem('currency') || 'ZAR';
+        let exchangeRates = {
+            'ZAR': 1,
+            'USD': 0.054, // 1 ZAR = 0.054 USD
+            'EUR': 0.049, // 1 ZAR = 0.049 EUR
+            'GBP': 0.042  // 1 ZAR = 0.042 GBP
+        };
 
         // Initialize the application
         function init() {
@@ -1703,6 +1778,9 @@
             setupEventListeners();
             loadProducts();
             checkAuthState();
+            
+            // Set currency selector to current currency
+            currencySelector.value = currentCurrency;
             
             // Check if user is admin (in a real app, this would check user role from Supabase)
             const urlParams = new URLSearchParams(window.location.search);
@@ -1713,6 +1791,28 @@
                     adminBtn.style.display = 'inline-flex';
                 }
             }
+        }
+
+        // Format currency based on current selection
+        function formatCurrency(amount, currency = currentCurrency) {
+            const config = currencyConfig[currency];
+            const convertedAmount = amount * exchangeRates[currency];
+            
+            // Format the number
+            const formattedNumber = convertedAmount.toFixed(config.precision)
+                .replace('.', config.decimal)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, config.separator);
+            
+            // Apply the format template
+            return config.format
+                .replace('%s', config.symbol)
+                .replace('%v', formattedNumber);
+        }
+
+        // Convert price to current currency
+        function convertPrice(price, fromCurrency = 'ZAR', toCurrency = currentCurrency) {
+            if (fromCurrency === toCurrency) return price;
+            return price * exchangeRates[toCurrency] / exchangeRates[fromCurrency];
         }
 
         // Setup all event listeners
@@ -1748,6 +1848,14 @@
                 if (e.target.classList.contains('modal')) {
                     closeModal(e.target);
                 }
+            });
+
+            // Currency selector
+            currencySelector.addEventListener('change', function() {
+                currentCurrency = this.value;
+                localStorage.setItem('currency', currentCurrency);
+                loadProducts();
+                updateCartUI();
             });
 
             // Checkout button
@@ -1917,8 +2025,8 @@
                         <h3 class="product-title">${product.name}</h3>
                         <p class="product-description">${product.description}</p>
                         <div class="product-price">
-                            ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
-                            $${product.price.toFixed(2)}
+                            ${product.originalPrice ? `<span class="original-price">${formatCurrency(product.originalPrice)}</span>` : ''}
+                            ${formatCurrency(product.price)}
                         </div>
                         <div class="product-actions">
                             <button class="btn btn-primary btn-small add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
@@ -1987,8 +2095,8 @@
                         <h4>About This ${product.category}</h4>
                         <p>${product.description}</p>
                         <div class="product-price">
-                            ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
-                            $${product.price.toFixed(2)}
+                            ${product.originalPrice ? `<span class="original-price">${formatCurrency(product.originalPrice)}</span>` : ''}
+                            ${formatCurrency(product.price)}
                         </div>
                         <div class="preview-sample">
                             <h5>Sample Content</h5>
@@ -2046,7 +2154,7 @@
                     <td>${product.id}</td>
                     <td>${product.name}</td>
                     <td>${product.category}</td>
-                    <td>$${product.price.toFixed(2)}</td>
+                    <td>${formatCurrency(product.price)}</td>
                     <td>${product.featured ? 'Featured' : 'Standard'}</td>
                     <td class="action-buttons">
                         <button class="btn-edit" data-id="${product.id}">
@@ -2202,7 +2310,7 @@
                     <div class="purchase-details">
                         <h4>${product.name}</h4>
                         <p>Purchased on: ${new Date(purchase.purchaseDate).toLocaleDateString()}</p>
-                        <p>Price: $${purchase.price.toFixed(2)}</p>
+                        <p>Price: ${formatCurrency(purchase.price)}</p>
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${purchase.progress}%"></div>
                         </div>
@@ -2282,7 +2390,7 @@
                         <p>Your cart is empty</p>
                     </div>
                 `;
-                cartTotalElement.textContent = '$0.00';
+                cartTotalElement.textContent = formatCurrency(0);
                 return;
             }
             
@@ -2300,7 +2408,7 @@
                     </div>
                     <div class="cart-item-details">
                         <div class="cart-item-title">${item.name}</div>
-                        <div class="cart-item-price">$${item.price.toFixed(2)} x ${item.quantity}</div>
+                        <div class="cart-item-price">${formatCurrency(item.price)} x ${item.quantity}</div>
                     </div>
                     <button class="cart-item-remove" data-id="${item.id}">
                         <i class="fas fa-trash"></i>
@@ -2311,7 +2419,7 @@
             });
             
             // Update total
-            cartTotalElement.textContent = `$${total.toFixed(2)}`;
+            cartTotalElement.textContent = formatCurrency(total);
             
             // Add event listeners to remove buttons
             document.querySelectorAll('.cart-item-remove').forEach(button => {

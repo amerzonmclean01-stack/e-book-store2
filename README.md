@@ -171,6 +171,17 @@
             transform: translateY(-2px);
         }
 
+        .btn-admin {
+            background: var(--gold);
+            color: var(--prophetic-blue);
+            font-weight: 700;
+        }
+
+        .btn-admin:hover {
+            background: #c19b2e;
+            transform: translateY(-2px);
+        }
+
         .cart-icon {
             position: relative;
             margin-left: 1rem;
@@ -482,6 +493,121 @@
             height: 100%;
             background: var(--gold);
             border-radius: 4px;
+        }
+
+        /* Admin Panel Styles */
+        .admin-panel {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-table th {
+            background: var(--prophetic-blue);
+            color: var(--white);
+        }
+
+        .admin-table tr:hover {
+            background: var(--gray);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit {
+            background: var(--warning);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background: var(--red);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Preview Modal Styles */
+        .preview-modal {
+            max-width: 900px;
+        }
+
+        .preview-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .preview-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .preview-cover {
+            background: var(--light-blue);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 4rem;
+            color: var(--prophetic-blue);
+        }
+
+        .preview-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .preview-sample {
+            background: var(--gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         /* Features Section */
@@ -920,6 +1046,14 @@
             .dashboard-content {
                 order: 1;
             }
+
+            .preview-body {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-actions {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 480px) {
@@ -972,6 +1106,9 @@
                     <span id="userName">User</span>
                     <button class="btn btn-outline btn-small" id="dashboardBtn">
                         <i class="fas fa-tachometer-alt"></i>Dashboard
+                    </button>
+                    <button class="btn btn-admin btn-small" id="adminBtn" style="display: none;">
+                        <i class="fas fa-cog"></i>Admin
                     </button>
                     <button class="btn btn-outline btn-small" id="logoutBtn">
                         <i class="fas fa-sign-out-alt"></i>Logout
@@ -1122,6 +1259,46 @@
                                 </form>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin Page -->
+        <section id="adminPage" style="display: none;">
+            <div class="dashboard">
+                <div class="container">
+                    <div class="dashboard-header">
+                        <h2 class="section-title">Admin Panel</h2>
+                        <div class="user-info">
+                            <span>Manage your store content</span>
+                        </div>
+                    </div>
+                    <div class="admin-panel">
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" id="addProductBtn">
+                                <i class="fas fa-plus"></i>Add New Product
+                            </button>
+                            <button class="btn btn-outline" id="refreshProductsBtn">
+                                <i class="fas fa-sync"></i>Refresh Products
+                            </button>
+                        </div>
+                        <h3>Product Management</h3>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTable">
+                                <!-- Products will be loaded dynamically -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -1279,6 +1456,86 @@
         </div>
     </div>
 
+    <!-- Preview Modal -->
+    <div class="modal" id="previewModal">
+        <div class="modal-content preview-modal">
+            <button class="close-modal">&times;</button>
+            <div class="preview-content" id="previewContent">
+                <!-- Preview content will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 class="modal-title" id="productModalTitle">Add New Product</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <option value="Ebook">Ebook</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Resource">Resource</option>
+                        <option value="Audio">Audio</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productType">Type</label>
+                    <select id="productType" class="form-control" required>
+                        <option value="">Select Type</option>
+                        <option value="ebook">Ebook (PDF)</option>
+                        <option value="video">Video Course</option>
+                        <option value="audio">Audio Series</option>
+                        <option value="pdf">Printable Resource</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price ($)</label>
+                    <input type="number" id="productPrice" class="form-control" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productOriginalPrice">Original Price ($) - Leave empty if no discount</label>
+                    <input type="number" id="productOriginalPrice" class="form-control" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="productBadge">Badge (Optional)</label>
+                    <select id="productBadge" class="form-control">
+                        <option value="">No Badge</option>
+                        <option value="Bestseller">Bestseller</option>
+                        <option value="New">New</option>
+                        <option value="Popular">Popular</option>
+                        <option value="Sale">Sale</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productFeatured">
+                        <input type="checkbox" id="productFeatured"> Featured Product
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="productSample">Sample Content (First few paragraphs)</label>
+                    <textarea id="productSample" class="form-control" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="productSubmitBtn">
+                    <span class="btn-text">Save Product</span>
+                    <div class="spinner" style="display: none;"></div>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -1294,64 +1551,70 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Sample Data (In a real app, this would come from Supabase)
-        const sampleProducts = [
+        let sampleProducts = [
             {
                 id: 1,
                 name: "The Path to Enlightenment",
-                description: "A comprehensive guide to spiritual growth and personal transformation.",
+                description: "A comprehensive guide to spiritual growth and personal transformation. This ebook takes you on a journey through ancient wisdom and modern practices to help you find inner peace and purpose.",
                 price: 24.99,
                 originalPrice: 29.99,
                 category: "Ebook",
                 type: "ebook",
                 badge: "Bestseller",
-                featured: true
+                featured: true,
+                sample: "In the quiet moments of our lives, we often find ourselves searching for meaning. This journey of self-discovery is not about finding answers outside of ourselves, but rather uncovering the truth that has always been within. The path to enlightenment begins with a single step - the decision to look inward and listen to the quiet whispers of your soul..."
             },
             {
                 id: 2,
                 name: "Manifesting Your Destiny",
-                description: "A 5-part video series on creating the life you desire through manifestation.",
+                description: "A 5-part video series on creating the life you desire through manifestation. Learn practical techniques to align your thoughts, emotions, and actions with your deepest desires.",
                 price: 49.99,
                 category: "Workshop",
                 type: "video",
                 badge: "New",
-                featured: true
+                featured: true,
+                sample: "Welcome to Manifesting Your Destiny. In this first module, we'll explore the fundamental principles of manifestation. Many people misunderstand manifestation as simply 'wishing for things to happen.' In reality, it's a sophisticated process of aligning your energy, beliefs, and actions with your desired outcomes. The universe responds not to what we want, but to who we become in the process of pursuing our desires..."
             },
             {
                 id: 3,
                 name: "Daily Reflection Journal",
-                description: "Printable journal with prompts for daily self-reflection and growth tracking.",
+                description: "Printable journal with prompts for daily self-reflection and growth tracking. This resource helps you develop consistency in your personal development practice.",
                 price: 12.99,
                 category: "Resource",
                 type: "pdf",
-                featured: true
+                featured: true,
+                sample: "Morning Reflection: What am I grateful for today? What intention will I set for this day? How can I show up as my best self? Evening Reflection: What went well today? What challenges did I face and how did I handle them? What did I learn about myself? What can I improve tomorrow?"
             },
             {
                 id: 4,
                 name: "Meditation Series",
-                description: "Guided meditation sessions for stress relief, focus, and inner peace.",
+                description: "Guided meditation sessions for stress relief, focus, and inner peace. Perfect for beginners and experienced practitioners alike.",
                 price: 19.99,
                 category: "Audio",
                 type: "audio",
                 badge: "Popular",
-                featured: true
+                featured: true,
+                sample: "Find a comfortable position, either sitting or lying down. Close your eyes and bring your awareness to your breath. Notice the natural rhythm of your breathing without trying to change it. As you breathe in, imagine you're breathing in peace and calm. As you breathe out, imagine you're releasing any tension or stress. Continue to follow your breath, allowing your body to relax more with each exhale..."
             },
             {
                 id: 5,
                 name: "Financial Freedom Blueprint",
-                description: "Step-by-step guide to achieving financial independence and security.",
+                description: "Step-by-step guide to achieving financial independence and security. Learn proven strategies for budgeting, investing, and wealth building.",
                 price: 34.99,
                 category: "Ebook",
                 type: "ebook",
-                featured: false
+                featured: false,
+                sample: "Financial freedom isn't about being rich - it's about having choices. It's the ability to make decisions based on what you want, not what you can afford. This blueprint will guide you through the fundamental principles of wealth building, starting with mindset shifts that are essential for long-term financial success. We'll debunk common myths about money and replace them with practical, actionable strategies..."
             },
             {
                 id: 6,
                 name: "Relationship Mastery",
-                description: "Workshop on building healthy, fulfilling relationships in all areas of life.",
+                description: "Workshop on building healthy, fulfilling relationships in all areas of life. Transform your connections with practical communication tools.",
                 price: 39.99,
                 category: "Workshop",
                 type: "video",
-                featured: false
+                featured: false,
+                sample: "Healthy relationships are the foundation of a fulfilling life. In this workshop, we'll explore the key elements that make relationships thrive. Communication is often cited as the most important factor, but what does effective communication really look like? It's not just about speaking clearly - it's about listening deeply, understanding non-verbal cues, and creating emotional safety for authentic expression..."
             }
         ];
 
@@ -1383,6 +1646,8 @@
         const loginModal = document.getElementById('loginModal');
         const signupModal = document.getElementById('signupModal');
         const cartModal = document.getElementById('cartModal');
+        const previewModal = document.getElementById('previewModal');
+        const productModal = document.getElementById('productModal');
         const closeModalButtons = document.querySelectorAll('.close-modal');
         const switchToSignup = document.getElementById('switchToSignup');
         const switchToLogin = document.getElementById('switchToLogin');
@@ -1393,8 +1658,10 @@
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
         const newsletterForm = document.getElementById('newsletterForm');
+        const productForm = document.getElementById('productForm');
         const loginSubmitBtn = document.getElementById('loginSubmitBtn');
         const signupSubmitBtn = document.getElementById('signupSubmitBtn');
+        const productSubmitBtn = document.getElementById('productSubmitBtn');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
         const authButtons = document.getElementById('authButtons');
@@ -1402,25 +1669,33 @@
         const userAvatar = document.getElementById('userAvatar');
         const userName = document.getElementById('userName');
         const dashboardBtn = document.getElementById('dashboardBtn');
+        const adminBtn = document.getElementById('adminBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const exploreProductsBtn = document.getElementById('exploreProductsBtn');
         const joinCommunityBtn = document.getElementById('joinCommunityBtn');
         const featuredProductsContainer = document.getElementById('featuredProducts');
         const allProductsContainer = document.getElementById('allProducts');
         const userPurchasesContainer = document.getElementById('userPurchases');
+        const adminProductsTable = document.getElementById('adminProductsTable');
+        const addProductBtn = document.getElementById('addProductBtn');
+        const refreshProductsBtn = document.getElementById('refreshProductsBtn');
         const navLinks = document.querySelectorAll('.nav-link');
         const dashboardNavLinks = document.querySelectorAll('.dashboard-nav-link');
         const dashboardTabs = document.querySelectorAll('.dashboard-tab');
         const homePage = document.getElementById('homePage');
         const productsPage = document.getElementById('productsPage');
         const dashboardPage = document.getElementById('dashboardPage');
+        const adminPage = document.getElementById('adminPage');
         const aboutPage = document.getElementById('aboutPage');
         const dashboardUserName = document.getElementById('dashboardUserName');
         const settingsForm = document.getElementById('settingsForm');
+        const previewContent = document.getElementById('previewContent');
+        const productModalTitle = document.getElementById('productModalTitle');
 
         // App State
         let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let isAdmin = false;
 
         // Initialize the application
         function init() {
@@ -1428,6 +1703,16 @@
             setupEventListeners();
             loadProducts();
             checkAuthState();
+            
+            // Check if user is admin (in a real app, this would check user role from Supabase)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true' || localStorage.getItem('isAdmin') === 'true') {
+                isAdmin = true;
+                localStorage.setItem('isAdmin', 'true');
+                if (currentUser) {
+                    adminBtn.style.display = 'inline-flex';
+                }
+            }
         }
 
         // Setup all event listeners
@@ -1473,9 +1758,11 @@
             signupForm.addEventListener('submit', handleSignup);
             newsletterForm.addEventListener('submit', handleNewsletter);
             settingsForm.addEventListener('submit', handleSettingsUpdate);
+            productForm.addEventListener('submit', handleProductSave);
 
             // Auth buttons
             dashboardBtn.addEventListener('click', () => showPage('dashboard'));
+            adminBtn.addEventListener('click', () => showPage('admin'));
             logoutBtn.addEventListener('click', handleLogout);
 
             // Navigation
@@ -1504,6 +1791,10 @@
                     switchDashboardTab(tab);
                 });
             });
+
+            // Admin buttons
+            addProductBtn.addEventListener('click', () => openProductModal());
+            refreshProductsBtn.addEventListener('click', loadProducts);
         }
 
         // Check authentication state and update UI
@@ -1514,6 +1805,11 @@
                 userName.textContent = currentUser.name;
                 dashboardUserName.textContent = currentUser.name;
                 userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+                
+                if (isAdmin) {
+                    adminBtn.style.display = 'inline-flex';
+                }
+                
                 loadUserPurchases();
             } else {
                 authButtons.style.display = 'flex';
@@ -1527,6 +1823,7 @@
             homePage.style.display = 'none';
             productsPage.style.display = 'none';
             dashboardPage.style.display = 'none';
+            adminPage.style.display = 'none';
             aboutPage.style.display = 'none';
 
             // Show selected page
@@ -1542,6 +1839,16 @@
                         dashboardPage.style.display = 'block';
                     } else {
                         openModal(loginModal);
+                        return;
+                    }
+                    break;
+                case 'admin':
+                    if (currentUser && isAdmin) {
+                        adminPage.style.display = 'block';
+                        loadAdminProducts();
+                    } else {
+                        showToast('Admin access required', 'error');
+                        showPage('home');
                         return;
                     }
                     break;
@@ -1581,11 +1888,20 @@
             
             renderProducts(featuredProducts, featuredProductsContainer);
             renderProducts(allProducts, allProductsContainer);
+            
+            if (isAdmin && adminPage.style.display !== 'none') {
+                loadAdminProducts();
+            }
         }
 
         // Render products to the DOM
         function renderProducts(products, container) {
             container.innerHTML = '';
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p>No products found.</p>';
+                return;
+            }
             
             products.forEach(product => {
                 const productCard = document.createElement('div');
@@ -1645,9 +1961,63 @@
             container.querySelectorAll('.preview-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const id = this.getAttribute('data-id');
-                    showToast('Preview feature coming soon!', 'success');
+                    showProductPreview(id);
                 });
             });
+        }
+
+        // Show product preview
+        function showProductPreview(productId) {
+            const product = sampleProducts.find(p => p.id == productId);
+            if (!product) {
+                showToast('Product not found', 'error');
+                return;
+            }
+            
+            previewContent.innerHTML = `
+                <div class="preview-header">
+                    <h3>Preview: ${product.name}</h3>
+                    <span class="product-category">${product.category}</span>
+                </div>
+                <div class="preview-body">
+                    <div class="preview-cover">
+                        <i class="fas ${getProductIcon(product.type)}"></i>
+                    </div>
+                    <div class="preview-details">
+                        <h4>About This ${product.category}</h4>
+                        <p>${product.description}</p>
+                        <div class="product-price">
+                            ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
+                            $${product.price.toFixed(2)}
+                        </div>
+                        <div class="preview-sample">
+                            <h5>Sample Content</h5>
+                            <p>${product.sample}</p>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="btn btn-primary add-to-cart-preview" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                                <i class="fas fa-cart-plus"></i>Add to Cart
+                            </button>
+                            <button class="btn btn-outline" onclick="closeModal(previewModal)">
+                                Continue Browsing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listener to preview add to cart button
+            previewContent.querySelector('.add-to-cart-preview').addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const price = this.getAttribute('data-price');
+                
+                addToCart(id, name, price);
+                showToast('Product added to cart!', 'success');
+                closeModal(previewModal);
+            });
+            
+            openModal(previewModal);
         }
 
         // Get appropriate icon for product type
@@ -1658,6 +2028,145 @@
                 case 'audio': return 'fa-headphones';
                 case 'pdf': return 'fa-file-pdf';
                 default: return 'fa-file';
+            }
+        }
+
+        // Load admin products table
+        function loadAdminProducts() {
+            adminProductsTable.innerHTML = '';
+            
+            if (sampleProducts.length === 0) {
+                adminProductsTable.innerHTML = '<tr><td colspan="6">No products found.</td></tr>';
+                return;
+            }
+            
+            sampleProducts.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>${product.featured ? 'Featured' : 'Standard'}</td>
+                    <td class="action-buttons">
+                        <button class="btn-edit" data-id="${product.id}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-delete" data-id="${product.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                
+                adminProductsTable.appendChild(row);
+            });
+            
+            // Add event listeners to admin action buttons
+            adminProductsTable.querySelectorAll('.btn-edit').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    openProductModal(id);
+                });
+            });
+            
+            adminProductsTable.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    deleteProduct(id);
+                });
+            });
+        }
+
+        // Open product modal for adding/editing
+        function openProductModal(productId = null) {
+            // Reset form
+            productForm.reset();
+            productModalTitle.textContent = productId ? 'Edit Product' : 'Add New Product';
+            
+            if (productId) {
+                // Edit existing product
+                const product = sampleProducts.find(p => p.id == productId);
+                if (product) {
+                    document.getElementById('productId').value = product.id;
+                    document.getElementById('productName').value = product.name;
+                    document.getElementById('productDescription').value = product.description;
+                    document.getElementById('productCategory').value = product.category;
+                    document.getElementById('productType').value = product.type;
+                    document.getElementById('productPrice').value = product.price;
+                    document.getElementById('productOriginalPrice').value = product.originalPrice || '';
+                    document.getElementById('productBadge').value = product.badge || '';
+                    document.getElementById('productFeatured').checked = product.featured;
+                    document.getElementById('productSample').value = product.sample || '';
+                }
+            } else {
+                // Add new product
+                document.getElementById('productId').value = '';
+            }
+            
+            openModal(productModal);
+        }
+
+        // Handle product save (add or update)
+        function handleProductSave(e) {
+            e.preventDefault();
+            
+            const productId = document.getElementById('productId').value;
+            const name = document.getElementById('productName').value;
+            const description = document.getElementById('productDescription').value;
+            const category = document.getElementById('productCategory').value;
+            const type = document.getElementById('productType').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const originalPrice = document.getElementById('productOriginalPrice').value ? 
+                parseFloat(document.getElementById('productOriginalPrice').value) : null;
+            const badge = document.getElementById('productBadge').value || null;
+            const featured = document.getElementById('productFeatured').checked;
+            const sample = document.getElementById('productSample').value;
+            
+            if (productId) {
+                // Update existing product
+                const index = sampleProducts.findIndex(p => p.id == productId);
+                if (index !== -1) {
+                    sampleProducts[index] = {
+                        ...sampleProducts[index],
+                        name,
+                        description,
+                        category,
+                        type,
+                        price,
+                        originalPrice,
+                        badge,
+                        featured,
+                        sample
+                    };
+                }
+            } else {
+                // Add new product
+                const newId = Math.max(...sampleProducts.map(p => p.id)) + 1;
+                sampleProducts.push({
+                    id: newId,
+                    name,
+                    description,
+                    category,
+                    type,
+                    price,
+                    originalPrice,
+                    badge,
+                    featured,
+                    sample
+                });
+            }
+            
+            showToast(`Product ${productId ? 'updated' : 'added'} successfully!`, 'success');
+            closeModal(productModal);
+            loadProducts();
+        }
+
+        // Delete product
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                sampleProducts = sampleProducts.filter(p => p.id != productId);
+                showToast('Product deleted successfully!', 'success');
+                loadProducts();
             }
         }
 
@@ -1680,26 +2189,44 @@
             }
             
             samplePurchases.forEach(purchase => {
+                const product = sampleProducts.find(p => p.id === purchase.productId);
+                if (!product) return;
+                
                 const purchaseCard = document.createElement('div');
                 purchaseCard.className = 'purchase-card';
                 
                 purchaseCard.innerHTML = `
                     <div class="purchase-image">
-                        <i class="fas fa-book"></i>
+                        <i class="fas ${getProductIcon(product.type)}"></i>
                     </div>
                     <div class="purchase-details">
-                        <h4>${purchase.productName}</h4>
+                        <h4>${product.name}</h4>
                         <p>Purchased on: ${new Date(purchase.purchaseDate).toLocaleDateString()}</p>
                         <p>Price: $${purchase.price.toFixed(2)}</p>
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${purchase.progress}%"></div>
                         </div>
                         <small>Progress: ${purchase.progress}%</small>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn btn-outline btn-small" onclick="accessProduct(${product.id})">
+                                <i class="fas fa-play"></i> Access Content
+                            </button>
+                        </div>
                     </div>
                 `;
                 
                 userPurchasesContainer.appendChild(purchaseCard);
             });
+        }
+
+        // Access purchased product
+        function accessProduct(productId) {
+            const product = sampleProducts.find(p => p.id === productId);
+            if (product) {
+                showToast(`Opening ${product.name}...`, 'success');
+                // In a real app, this would redirect to the product content page
+                // or open the PDF/video/audio content
+            }
         }
 
         // Modal Functions
@@ -1922,7 +2449,9 @@
             // await supabase.auth.signOut();
             
             currentUser = null;
+            isAdmin = false;
             localStorage.removeItem('currentUser');
+            localStorage.removeItem('isAdmin');
             showToast('Logged out successfully', 'success');
             checkAuthState();
             showPage('home');

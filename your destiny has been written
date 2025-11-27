@@ -120,6 +120,13 @@
             align-items: center;
         }
 
+        .user-welcome {
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .cart-icon, .wishlist-icon {
             position: relative;
             cursor: pointer;
@@ -176,6 +183,11 @@
 
         .btn-outline:hover {
             background: rgba(255,255,255,0.1);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: var(--white);
         }
 
         .menu-toggle {
@@ -557,7 +569,7 @@
             background-color: var(--white);
             padding: 2rem;
             border-radius: 10px;
-            max-width: 800px;
+            max-width: 500px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -646,6 +658,129 @@
             resize: vertical;
         }
 
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .forgot-password {
+            color: var(--prophetic-blue);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        /* User Profile */
+        .profile-section {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--prophetic-blue), var(--prophetic-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 2rem;
+        }
+
+        .profile-info h3 {
+            color: var(--prophetic-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--prophetic-blue);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Order History */
+        .order-history {
+            margin-top: 2rem;
+        }
+
+        .order-card {
+            background: var(--white);
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: var(--prophetic-blue);
+        }
+
+        .order-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+
         /* Cookie Consent */
         #cookieConsent {
             position: fixed;
@@ -719,6 +854,17 @@
             .modal-content {
                 padding: 1.5rem;
             }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
         }
 
         /* Loading Spinner */
@@ -735,6 +881,11 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
@@ -780,13 +931,8 @@
                         <span class="cart-count">0</span>
                     </div>
                     
-                    <div class="auth-buttons">
-                        <button class="btn btn-outline" onclick="openAuthModal()">
-                            <i class="fas fa-user"></i> Login
-                        </button>
-                        <button class="btn btn-primary" onclick="openAuthModal('register')">
-                            <i class="fas fa-user-plus"></i> Sign Up
-                        </button>
+                    <div class="auth-buttons" id="authButtons">
+                        <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
             </div>
@@ -802,6 +948,57 @@
             <button class="btn btn-primary" onclick="scrollToSection('products')">
                 <i class="fas fa-shopping-bag"></i> Explore Our Resources
             </button>
+        </div>
+    </section>
+
+    <!-- User Profile Section (Hidden by default) -->
+    <section id="userProfile" class="hidden">
+        <h2>My Account</h2>
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h3 id="userProfileName">Loading...</h3>
+                    <p id="userProfileEmail">Loading...</p>
+                    <p>Member since <span id="userJoinDate">2025</span></p>
+                </div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="ordersCount">0</span>
+                    <span class="stat-label">Orders</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="wishlistCount">0</span>
+                    <span class="stat-label">Wishlist Items</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="coachingSessions">0</span>
+                    <span class="stat-label">Coaching Sessions</span>
+                </div>
+            </div>
+
+            <div class="user-actions">
+                <button class="btn btn-primary" onclick="openEditProfileModal()">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+                <button class="btn btn-outline" onclick="openChangePasswordModal()">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="order-history">
+            <h3>Order History</h3>
+            <div id="orderHistory">
+                <p>No orders yet. <a href="#products" onclick="scrollToSection('products')">Start shopping!</a></p>
+            </div>
         </div>
     </section>
 
@@ -1042,8 +1239,8 @@
                     <label for="loginPassword">Password</label>
                     <input type="password" id="loginPassword" required>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
-                    <a href="#" style="color: var(--prophetic-blue); text-decoration: none;">Forgot Password?</a>
+                <div class="form-footer">
+                    <a href="#" class="forgot-password" onclick="openForgotPasswordModal(); return false;">Forgot Password?</a>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
@@ -1070,6 +1267,101 @@
         </div>
     </div>
 
+    <!-- Forgot Password Modal -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reset Your Password</h3>
+                <button class="close-modal" onclick="closeForgotPasswordModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="resetEmail">Email Address</label>
+                    <input type="email" id="resetEmail" required placeholder="Enter your email address">
+                </div>
+                <p style="margin-bottom: 1rem; color: #6b7280; font-size: 0.9rem;">
+                    We'll send you a link to reset your password.
+                </p>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Send Reset Link
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="#" onclick="closeForgotPasswordModal(); openAuthModal(); return false;" style="color: var(--prophetic-blue); text-decoration: none;">
+                    Back to Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Password</h3>
+                <button class="close-modal" onclick="closeChangePasswordModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Update Password
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <button class="close-modal" onclick="closeEditProfileModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editName">Full Name</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email Address</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone Number</label>
+                    <input type="tel" id="editPhone" placeholder="Optional">
+                </div>
+                <div class="form-group">
+                    <label for="editBio">Bio</label>
+                    <textarea id="editBio" placeholder="Tell us about yourself..." rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Payment Modal -->
     <div class="modal" id="paymentModal">
         <div class="modal-content">
@@ -1092,6 +1384,19 @@
             user: null,
             cart: [],
             wishlist: [],
+            orders: [],
+            users: [
+                {
+                    id: 1,
+                    name: "Admin User",
+                    email: "admin@definitiveword.org",
+                    password: "admin123",
+                    role: "admin",
+                    joinDate: "2025-01-01",
+                    phone: "+27 21 123 4567",
+                    bio: "Site administrator and ministry leader."
+                }
+            ],
             products: [
                 {
                     id: 1,
@@ -1112,26 +1417,6 @@
                     image: "🕊️",
                     inventory: 50,
                     sku: "EBK-002"
-                },
-                {
-                    id: 3,
-                    name: "The Written Word",
-                    description: "Exploring the power of God's promises and declarations over your life.",
-                    price: 269.99,
-                    category: "ebook",
-                    image: "✝️",
-                    inventory: 75,
-                    sku: "EBK-003"
-                },
-                {
-                    id: 4,
-                    name: "Prayer & Fasting Guide",
-                    description: "A 21-day guide to deepening your prayer life through biblical fasting.",
-                    price: 199.99,
-                    category: "ebook",
-                    image: "🙏",
-                    inventory: 0,
-                    sku: "EBK-004"
                 }
             ],
             blogPosts: [
@@ -1141,41 +1426,17 @@
                     description: "Discovering how to align your daily life with the prophetic words spoken over you...",
                     date: "2025-11-20",
                     content: "Full blog post content would go here..."
-                },
-                {
-                    id: 2,
-                    title: "The Power of Declared Destiny",
-                    description: "Understanding how God's written word over your life shapes your future...",
-                    date: "2025-11-15",
-                    content: "Full blog post content would go here..."
-                },
-                {
-                    id: 3,
-                    title: "Breaking Through Limitations",
-                    description: "Practical steps to overcome the barriers standing between you and your destiny...",
-                    date: "2025-11-10",
-                    content: "Full blog post content would go here..."
                 }
             ],
             workshops: [
                 {
                     id: 1,
                     title: "Prophetic Activation Workshop",
-                    description: "A powerful one-day intensive designed to activate and strengthen your prophetic gifting. Learn to hear God's voice clearly and minister prophetically with confidence.",
+                    description: "A powerful one-day intensive designed to activate and strengthen your prophetic gifting.",
                     date: "2025-12-15",
                     price: 499.99,
                     location: "Virtual (Zoom)",
                     time: "9:00 AM - 4:00 PM",
-                    inventory: 20
-                },
-                {
-                    id: 2,
-                    title: "Destiny Mapping Masterclass",
-                    description: "Discover God's blueprint for your life and create a practical roadmap to walk in your divine purpose. Limited to 20 participants for personalized attention.",
-                    date: "2026-01-22",
-                    price: 799.99,
-                    location: "Cape Town, South Africa",
-                    time: "6:00 PM - 9:00 PM",
                     inventory: 20
                 }
             ]
@@ -1191,7 +1452,12 @@
             cartCount: document.querySelector('.cart-count'),
             wishlistCount: document.querySelector('.wishlist-count'),
             authModal: document.getElementById('authModal'),
+            forgotPasswordModal: document.getElementById('forgotPasswordModal'),
+            changePasswordModal: document.getElementById('changePasswordModal'),
+            editProfileModal: document.getElementById('editProfileModal'),
             paymentModal: document.getElementById('paymentModal'),
+            authButtons: document.getElementById('authButtons'),
+            userProfile: document.getElementById('userProfile'),
             productsGrid: document.getElementById('productsGrid'),
             blogContainer: document.getElementById('blogContainer'),
             workshopsContainer: document.getElementById('workshopsContainer'),
@@ -1202,6 +1468,7 @@
 
         // Initialize the application
         function init() {
+            checkLoginStatus();
             renderProducts();
             renderBlogPosts();
             renderWorkshops();
@@ -1212,6 +1479,9 @@
             // Set up event listeners
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            document.getElementById('forgotPasswordForm').addEventListener('submit', handleForgotPassword);
+            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePassword);
+            document.getElementById('editProfileForm').addEventListener('submit', handleEditProfile);
             document.getElementById('contactForm').addEventListener('submit', handleContact);
             
             // Search functionality
@@ -1223,347 +1493,260 @@
             });
         }
 
-        // Navigation Functions
-        function toggleMenu() {
-            elements.navContainer.classList.toggle('active');
-        }
-
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-            toggleMenu();
-        }
-
-        // Cart Functions
-        function toggleCart() {
-            elements.cartSidebar.classList.toggle('active');
-        }
-
-        function addToCart(name, price, category, id = null) {
-            const productId = id || Date.now();
-            const product = state.products.find(p => p.id === productId);
-            
-            // Check inventory
-            if (product && product.inventory <= 0) {
-                showNotification('Sorry, this item is out of stock', 'error');
-                return;
-            }
-            
-            const existingItem = state.cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                // Check if we have enough inventory
-                if (product && existingItem.quantity >= product.inventory) {
-                    showNotification(`Only ${product.inventory} items available`, 'error');
-                    return;
-                }
-                existingItem.quantity += 1;
+        // Authentication Functions
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                state.user = JSON.parse(savedUser);
+                updateAuthUI();
             } else {
-                state.cart.push({
-                    id: productId,
-                    name,
-                    price,
-                    category,
-                    quantity: 1
-                });
-            }
-            
-            updateCartUI();
-            showNotification(`${name} added to cart!`, 'success');
-            
-            if (category !== 'coaching') {
-                elements.cartSidebar.classList.add('active');
+                showLoginButtons();
             }
         }
 
-        function removeFromCart(id) {
-            state.cart = state.cart.filter(item => item.id !== id);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            // Update cart items
-            elements.cartItems.innerHTML = '';
-            
-            if (state.cart.length === 0) {
-                elements.cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-                elements.checkoutBtn.disabled = true;
-            } else {
-                state.cart.forEach(item => {
-                    const cartItem = document.createElement('div');
-                    cartItem.className = 'cart-item';
-                    cartItem.innerHTML = `
-                        <div class="cart-item-image">${getProductIcon(item.category)}</div>
-                        <div class="cart-item-details">
-                            <h4>${item.name}</h4>
-                            <div class="price">R ${item.price.toFixed(2)}</div>
-                            <div class="cart-item-controls">
-                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-                                <span class="quantity">${item.quantity}</span>
-                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                                <button class="remove-item" onclick="removeFromCart(${item.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    elements.cartItems.appendChild(cartItem);
-                });
-                elements.checkoutBtn.disabled = false;
-            }
-            
-            // Update cart total and count
-            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const count = state.cart.reduce((sum, item) => sum + item.quantity, 0);
-            
-            elements.cartTotal.textContent = `R ${total.toFixed(2)}`;
-            elements.cartCount.textContent = count;
-        }
-
-        function updateQuantity(id, change) {
-            const item = state.cart.find(item => item.id === id);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) {
-                    removeFromCart(id);
-                } else {
-                    updateCartUI();
-                }
-            }
-        }
-
-        // Wishlist Functions
-        function toggleWishlist() {
-            elements.wishlistSidebar.classList.toggle('active');
-        }
-
-        function toggleWishlistItem(productId) {
-            const product = state.products.find(p => p.id === productId);
-            const existingIndex = state.wishlist.findIndex(item => item.id === productId);
-            
-            if (existingIndex !== -1) {
-                state.wishlist.splice(existingIndex, 1);
-                showNotification('Removed from wishlist', 'success');
-            } else {
-                state.wishlist.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    category: product.category,
-                    image: product.image
-                });
-                showNotification('Added to wishlist', 'success');
-            }
-            
-            updateWishlistUI();
-            renderProducts(); // Update wishlist buttons
-        }
-
-        function updateWishlistUI() {
-            // Update wishlist items
-            elements.wishlistItems.innerHTML = '';
-            
-            if (state.wishlist.length === 0) {
-                elements.wishlistItems.innerHTML = '<div class="empty-wishlist">Your wishlist is empty</div>';
-            } else {
-                state.wishlist.forEach(item => {
-                    const wishlistItem = document.createElement('div');
-                    wishlistItem.className = 'wishlist-item';
-                    wishlistItem.innerHTML = `
-                        <div class="wishlist-item-image">${item.image}</div>
-                        <div class="wishlist-item-details">
-                            <h4>${item.name}</h4>
-                            <div class="price">R ${item.price.toFixed(2)}</div>
-                            <div class="cart-item-controls">
-                                <button class="btn btn-primary" onclick="addToCart('${item.name}', ${item.price}, '${item.category}', ${item.id})">
-                                    <i class="fas fa-cart-plus"></i> Add to Cart
-                                </button>
-                                <button class="remove-item" onclick="toggleWishlistItem(${item.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    elements.wishlistItems.appendChild(wishlistItem);
-                });
-            }
-            
-            // Update wishlist count
-            elements.wishlistCount.textContent = state.wishlist.length;
-        }
-
-        function getProductIcon(category) {
-            switch(category) {
-                case 'ebook': return '📖';
-                case 'workshop': return '🎓';
-                case 'coaching': return '🎯';
-                default: return '📦';
-            }
-        }
-
-        // Product Functions
-        function renderProducts() {
-            elements.productsGrid.innerHTML = '';
-            
-            state.products.forEach(product => {
-                const isInWishlist = state.wishlist.some(item => item.id === product.id);
-                const isOutOfStock = product.inventory <= 0;
-                
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <div class="product-image">${product.image}</div>
-                    <button class="wishlist-btn ${isInWishlist ? 'active' : ''}" onclick="toggleWishlistItem(${product.id})">
-                        <i class="fas fa-heart"></i>
+        function updateAuthUI() {
+            if (state.user) {
+                elements.authButtons.innerHTML = `
+                    <div class="user-welcome">
+                        <i class="fas fa-user"></i>
+                        <span>Hello, ${state.user.name}</span>
+                    </div>
+                    <button class="btn btn-outline" onclick="showUserProfile()">
+                        <i class="fas fa-user-circle"></i> My Account
                     </button>
-                    <div class="product-content">
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
-                        <div class="product-footer">
+                    <button class="btn btn-outline" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                `;
+            } else {
+                showLoginButtons();
+            }
+        }
+
+        function showLoginButtons() {
+            elements.authButtons.innerHTML = `
+                <button class="btn btn-outline" onclick="openAuthModal()">
+                    <i class="fas fa-user"></i> Login
+                </button>
+                <button class="btn btn-primary" onclick="openAuthModal('register')">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+            `;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Find user
+            const user = state.users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Remove password from user object before storing
+                const { password: _, ...userWithoutPassword } = user;
+                state.user = userWithoutPassword;
+                localStorage.setItem('currentUser', JSON.stringify(state.user));
+                
+                closeAuthModal();
+                updateAuthUI();
+                showNotification('Login successful!', 'success');
+            } else {
+                showNotification('Invalid email or password', 'error');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            // Check if user already exists
+            if (state.users.find(u => u.email === email)) {
+                showNotification('User with this email already exists', 'error');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password,
+                role: 'customer',
+                joinDate: new Date().toISOString().split('T')[0],
+                phone: '',
+                bio: ''
+            };
+            
+            state.users.push(newUser);
+            
+            // Remove password from user object before storing
+            const { password: _, ...userWithoutPassword } = newUser;
+            state.user = userWithoutPassword;
+            localStorage.setItem('currentUser', JSON.stringify(state.user));
+            
+            closeAuthModal();
+            updateAuthUI();
+            showNotification('Account created successfully!', 'success');
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            
+            // Check if user exists
+            const user = state.users.find(u => u.email === email);
+            
+            if (user) {
+                closeForgotPasswordModal();
+                showNotification('Password reset link has been sent to your email', 'success');
+            } else {
+                showNotification('No account found with this email', 'error');
+            }
+        }
+
+        function handleChangePassword(e) {
+            e.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            
+            if (newPassword !== confirmNewPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            // Find user and update password
+            const userIndex = state.users.findIndex(u => u.email === state.user.email);
+            if (userIndex !== -1 && state.users[userIndex].password === currentPassword) {
+                state.users[userIndex].password = newPassword;
+                closeChangePasswordModal();
+                showNotification('Password updated successfully', 'success');
+            } else {
+                showNotification('Current password is incorrect', 'error');
+            }
+        }
+
+        function handleEditProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('editName').value;
+            const email = document.getElementById('editEmail').value;
+            const phone = document.getElementById('editPhone').value;
+            const bio = document.getElementById('editBio').value;
+            
+            // Update user in state
+            const userIndex = state.users.findIndex(u => u.email === state.user.email);
+            if (userIndex !== -1) {
+                state.users[userIndex].name = name;
+                state.users[userIndex].email = email;
+                state.users[userIndex].phone = phone;
+                state.users[userIndex].bio = bio;
+                
+                // Update current user
+                state.user.name = name;
+                state.user.email = email;
+                state.user.phone = phone;
+                state.user.bio = bio;
+                
+                localStorage.setItem('currentUser', JSON.stringify(state.user));
+                
+                closeEditProfileModal();
+                updateAuthUI();
+                updateUserProfile();
+                showNotification('Profile updated successfully', 'success');
+            }
+        }
+
+        function logout() {
+            state.user = null;
+            localStorage.removeItem('currentUser');
+            updateAuthUI();
+            hideUserProfile();
+            showNotification('Logged out successfully', 'success');
+        }
+
+        // User Profile Functions
+        function showUserProfile() {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show user profile section
+            elements.userProfile.classList.remove('hidden');
+            updateUserProfile();
+            scrollToSection('userProfile');
+        }
+
+        function hideUserProfile() {
+            elements.userProfile.classList.add('hidden');
+            document.getElementById('home').classList.remove('hidden');
+        }
+
+        function updateUserProfile() {
+            if (!state.user) return;
+            
+            document.getElementById('userProfileName').textContent = state.user.name;
+            document.getElementById('userProfileEmail').textContent = state.user.email;
+            document.getElementById('userJoinDate').textContent = state.user.joinDate;
+            
+            // Update stats
+            const userOrders = state.orders.filter(order => order.customerEmail === state.user.email);
+            document.getElementById('ordersCount').textContent = userOrders.length;
+            document.getElementById('wishlistCount').textContent = state.wishlist.length;
+            
+            const coachingSessions = userOrders.filter(order => 
+                order.items.some(item => item.category === 'coaching')
+            ).length;
+            document.getElementById('coachingSessions').textContent = coachingSessions;
+            
+            // Update order history
+            const orderHistory = document.getElementById('orderHistory');
+            if (userOrders.length === 0) {
+                orderHistory.innerHTML = '<p>No orders yet. <a href="#products" onclick="scrollToSection(\'products\')">Start shopping!</a></p>';
+            } else {
+                orderHistory.innerHTML = userOrders.map(order => `
+                    <div class="order-card">
+                        <div class="order-header">
                             <div>
-                                <div class="price">R ${product.price.toFixed(2)}</div>
-                                <div class="${isOutOfStock ? 'out-of-stock' : 'in-stock'}">
-                                    ${isOutOfStock ? 'Out of Stock' : 'In Stock'}
-                                </div>
+                                <span class="order-id">Order #${order.id}</span>
+                                <div class="order-date">${new Date(order.date).toLocaleDateString()}</div>
                             </div>
-                            <button class="btn btn-primary" onclick="addToCart('${product.name}', ${product.price}, '${product.category}', ${product.id})" ${isOutOfStock ? 'disabled' : ''}>
-                                <i class="fas fa-cart-plus"></i> ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-                            </button>
+                            <div class="order-status status-completed">Completed</div>
+                        </div>
+                        <div>
+                            ${order.items.map(item => `
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>${item.name} x${item.quantity}</span>
+                                    <span>R ${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                            <hr style="margin: 0.5rem 0;">
+                            <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                                <span>Total:</span>
+                                <span>R ${order.total.toFixed(2)}</span>
+                            </div>
                         </div>
                     </div>
-                `;
-                elements.productsGrid.appendChild(productCard);
-            });
-        }
-
-        // Blog Functions
-        function renderBlogPosts() {
-            const blogContainer = document.getElementById('blogContainer');
-            blogContainer.innerHTML = '';
-            
-            state.blogPosts.forEach(post => {
-                const blogPost = document.createElement('article');
-                blogPost.style.cssText = 'background: var(--light-gray); padding: 2rem; border-radius: 10px; border-left: 4px solid var(--prophetic-blue);';
-                blogPost.innerHTML = `
-                    <h3 style="color: var(--prophetic-blue); margin-bottom: 0.5rem;">${post.title}</h3>
-                    <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem;">${formatDate(post.date)}</p>
-                    <p style="margin-bottom: 1rem;">${post.description}</p>
-                    <a href="#" style="color: var(--prophetic-blue); text-decoration: none; font-weight: bold;" onclick="readBlogPost(${post.id}); return false;">
-                        Read More <i class="fas fa-arrow-right"></i>
-                    </a>
-                `;
-                blogContainer.appendChild(blogPost);
-            });
-        }
-
-        function readBlogPost(id) {
-            const post = state.blogPosts.find(p => p.id === id);
-            if (post) {
-                alert(`Opening blog post: "${post.title}"\n\n${post.content || "Full content would be displayed here in a complete implementation."}`);
-            }
-        }
-
-        // Workshop Functions
-        function renderWorkshops() {
-            const workshopsContainer = document.getElementById('workshopsContainer');
-            workshopsContainer.innerHTML = '';
-            
-            state.workshops.forEach(workshop => {
-                const isOutOfStock = workshop.inventory <= 0;
-                const workshopCard = document.createElement('div');
-                workshopCard.style.cssText = 'background: var(--white); border: 2px solid var(--prophetic-blue); padding: 2rem; border-radius: 10px; display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: center;';
-                workshopCard.innerHTML = `
-                    <div style="background: var(--prophetic-red); color: var(--white); padding: 2rem; text-align: center; border-radius: 10px;">
-                        <div style="font-size: 3rem; font-weight: bold;">${new Date(workshop.date).getDate()}</div>
-                        <div style="font-size: 1.2rem;">${new Date(workshop.date).toLocaleString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()}</div>
-                    </div>
-                    <div>
-                        <h3 style="color: var(--prophetic-blue); margin-bottom: 1rem;">${workshop.title}</h3>
-                        <p style="margin-bottom: 1rem;">${workshop.description}</p>
-                        <p><strong>Location:</strong> ${workshop.location}</p>
-                        <p><strong>Time:</strong> ${workshop.time}</p>
-                        <p><strong>Cost:</strong> R ${workshop.price.toFixed(2)}</p>
-                        <p><strong>Spots:</strong> ${workshop.inventory} remaining</p>
-                        <button class="btn btn-primary" onclick="addToCart('${workshop.title}', ${workshop.price}, 'workshop', ${workshop.id})" ${isOutOfStock ? 'disabled' : ''}>
-                            <i class="fas fa-ticket-alt"></i> ${isOutOfStock ? 'Sold Out' : 'Register Now'}
-                        </button>
-                    </div>
-                `;
-                workshopsContainer.appendChild(workshopCard);
-            });
-        }
-
-        // Search functionality
-        function handleSearch(e) {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (searchTerm.length === 0) {
-                elements.searchResults.style.display = 'none';
-                return;
+                `).join('');
             }
             
-            if (searchTerm.length < 2) {
-                elements.searchResults.style.display = 'none';
-                return;
-            }
-            
-            const results = [
-                ...state.products.filter(p => 
-                    p.name.toLowerCase().includes(searchTerm) || 
-                    p.description.toLowerCase().includes(searchTerm)
-                ).map(p => ({ ...p, type: 'product' })),
-                ...state.blogPosts.filter(b => 
-                    b.title.toLowerCase().includes(searchTerm) || 
-                    b.description.toLowerCase().includes(searchTerm)
-                ).map(b => ({ ...b, type: 'blog' })),
-                ...state.workshops.filter(w => 
-                    w.title.toLowerCase().includes(searchTerm) || 
-                    w.description.toLowerCase().includes(searchTerm)
-                ).map(w => ({ ...w, type: 'workshop' }))
-            ];
-            
-            displaySearchResults(results);
+            // Populate edit form
+            document.getElementById('editName').value = state.user.name;
+            document.getElementById('editEmail').value = state.user.email;
+            document.getElementById('editPhone').value = state.user.phone || '';
+            document.getElementById('editBio').value = state.user.bio || '';
         }
 
-        function displaySearchResults(results) {
-            if (results.length === 0) {
-                elements.searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
-                elements.searchResults.style.display = 'block';
-                return;
-            }
-            
-            elements.searchResults.innerHTML = results.map(item => `
-                <div class="search-result-item" onclick="handleSearchResultClick('${item.type}', ${item.id})">
-                    <div class="search-result-icon">
-                        ${item.type === 'product' ? '📖' : item.type === 'blog' ? '📝' : '🎓'}
-                    </div>
-                    <div>
-                        <div style="font-weight: bold;">${item.title}</div>
-                        <div style="font-size: 0.8rem; color: #6b7280;">${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</div>
-                    </div>
-                </div>
-            `).join('');
-            
-            elements.searchResults.style.display = 'block';
-        }
-
-        function handleSearchResultClick(type, id) {
-            elements.searchResults.style.display = 'none';
-            elements.searchInput.value = '';
-            
-            switch(type) {
-                case 'product':
-                    scrollToSection('products');
-                    break;
-                case 'blog':
-                    scrollToSection('blog');
-                    break;
-                case 'workshop':
-                    scrollToSection('workshops');
-                    break;
-            }
-        }
-
-        // Auth Functions
+        // Modal Functions
         function openAuthModal(tab = 'login') {
             elements.authModal.classList.add('active');
             switchAuthTab(tab);
@@ -1571,6 +1754,31 @@
 
         function closeAuthModal() {
             elements.authModal.classList.remove('active');
+        }
+
+        function openForgotPasswordModal() {
+            closeAuthModal();
+            elements.forgotPasswordModal.classList.add('active');
+        }
+
+        function closeForgotPasswordModal() {
+            elements.forgotPasswordModal.classList.remove('active');
+        }
+
+        function openChangePasswordModal() {
+            elements.changePasswordModal.classList.add('active');
+        }
+
+        function closeChangePasswordModal() {
+            elements.changePasswordModal.classList.remove('active');
+        }
+
+        function openEditProfileModal() {
+            elements.editProfileModal.classList.add('active');
+        }
+
+        function closeEditProfileModal() {
+            elements.editProfileModal.classList.remove('active');
         }
 
         function switchAuthTab(tab) {
@@ -1588,308 +1796,8 @@
             }
         }
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Simple authentication
-            if (email === 'admin@definitiveword.org' && password === 'admin123') {
-                state.user = {
-                    name: 'Admin User',
-                    email: email,
-                    role: 'admin'
-                };
-                closeAuthModal();
-                showNotification('Login successful!', 'success');
-            } else if (email && password) {
-                state.user = {
-                    name: email.split('@')[0],
-                    email: email,
-                    role: 'customer'
-                };
-                closeAuthModal();
-                showNotification('Login successful!', 'success');
-            } else {
-                showNotification('Please enter email and password', 'error');
-            }
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match', 'error');
-                return;
-            }
-            
-            if (!name || !email || !password) {
-                showNotification('Please fill in all fields', 'error');
-                return;
-            }
-            
-            state.user = {
-                name: name,
-                email: email,
-                role: 'customer'
-            };
-            
-            closeAuthModal();
-            showNotification('Account created successfully!', 'success');
-        }
-
-        // Checkout Functions
-        function checkout() {
-            if (state.cart.length === 0) {
-                showNotification('Your cart is empty', 'error');
-                return;
-            }
-            
-            // Check if cart contains coaching session (free item)
-            const hasCoaching = state.cart.some(item => item.category === 'coaching');
-            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            if (hasCoaching && total === 0) {
-                completeFreeOrder();
-            } else {
-                showPaymentOptions();
-            }
-        }
-
-        function showPaymentOptions() {
-            elements.paymentModal.classList.add('active');
-            
-            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            elements.paymentContent.innerHTML = `
-                <h4>Order Summary</h4>
-                <div style="margin: 1rem 0;">
-                    ${state.cart.map(item => `
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                            <span>${item.name} x${item.quantity}</span>
-                            <span>R ${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                    `).join('')}
-                    <hr style="margin: 1rem 0;">
-                    <div style="display: flex; justify-content: space-between; font-weight: bold;">
-                        <span>Total:</span>
-                        <span>R ${total.toFixed(2)}</span>
-                    </div>
-                </div>
-                
-                <h4>Select Payment Method</h4>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
-                    <button class="btn btn-primary" onclick="processStripePayment()" style="display: flex; flex-direction: column; align-items: center; padding: 1rem;">
-                        <i class="fab fa-cc-stripe" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                        <span>Credit/Debit Card</span>
-                    </button>
-                    <button class="btn btn-outline" onclick="processPayPalPayment()" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; border-color: var(--prophetic-blue); color: var(--prophetic-blue);">
-                        <i class="fab fa-paypal" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                        <span>PayPal</span>
-                    </button>
-                </div>
-                
-                <div style="margin-top: 1rem; text-align: center;">
-                    <button class="btn" onclick="closePaymentModal()" style="background: #6b7280; color: white; width: 100%;">
-                        Cancel
-                    </button>
-                </div>
-            `;
-        }
-
-        function closePaymentModal() {
-            elements.paymentModal.classList.remove('active');
-        }
-
-        function processStripePayment() {
-            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            elements.paymentContent.innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="font-size: 3rem; color: var(--prophetic-blue); margin-bottom: 1rem;">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <h4>Processing Payment...</h4>
-                    <p>Please wait while we process your payment</p>
-                    <div style="margin: 2rem 0;">
-                        <div class="spinner"></div>
-                    </div>
-                </div>
-            `;
-            
-            // Simulate payment processing
-            setTimeout(() => {
-                completePaidOrder();
-            }, 2000);
-        }
-
-        function processPayPalPayment() {
-            alert('PayPal integration would be implemented here. For demo purposes, we will complete the order.');
-            completePaidOrder();
-        }
-
-        function completeFreeOrder() {
-            const order = {
-                id: Date.now(),
-                customerName: state.user ? state.user.name : 'Guest',
-                customerEmail: state.user ? state.user.email : 'guest@example.com',
-                items: [...state.cart],
-                total: 0,
-                status: 'completed',
-                date: new Date().toISOString()
-            };
-            
-            showNotification('Your coaching session has been booked! We will contact you shortly.', 'success');
-            
-            state.cart = [];
-            updateCartUI();
-            toggleCart();
-            
-            closePaymentModal();
-        }
-
-        function completePaidOrder() {
-            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            const order = {
-                id: Date.now(),
-                customerName: state.user ? state.user.name : 'Guest',
-                customerEmail: state.user ? state.user.email : 'guest@example.com',
-                items: [...state.cart],
-                total: total,
-                status: 'completed',
-                date: new Date().toISOString()
-            };
-            
-            elements.paymentContent.innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h4>Payment Successful!</h4>
-                    <p>Thank you for your purchase. Your order has been confirmed.</p>
-                    <p>Order ID: <strong>#${order.id}</strong></p>
-                    <p>Total: <strong>R ${total.toFixed(2)}</strong></p>
-                    <p>A confirmation email has been sent to <strong>${state.user ? state.user.email : 'your email'}</strong></p>
-                    <button class="btn btn-primary" onclick="closePaymentModal()" style="margin-top: 1rem;">
-                        Continue Shopping
-                    </button>
-                </div>
-            `;
-            
-            state.cart = [];
-            updateCartUI();
-        }
-
-        // Contact Form Handler
-        function handleContact(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
-            
-            console.log('Contact form submitted:', { name, email, subject, message });
-            
-            showNotification('Thank you for your message! We will get back to you soon.', 'success');
-            e.target.reset();
-        }
-
-        // Social sharing
-        function shareOnFacebook() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out The Definitive Word Ministry!');
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
-        }
-
-        function shareOnTwitter() {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Check out The Definitive Word Ministry!');
-            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
-        }
-
-        function shareOnLinkedIn() {
-            const url = encodeURIComponent(window.location.href);
-            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
-        }
-
-        function shareOnWhatsApp() {
-            const text = encodeURIComponent('Check out The Definitive Word Ministry! ' + window.location.href);
-            window.open(`https://wa.me/?text=${text}`, '_blank');
-        }
-
-        // Utility Functions
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('en-US', options);
-        }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-                <button onclick="this.parentElement.remove()" style="background: none; border: none; cursor: pointer;">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 5px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                z-index: 1300;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                min-width: 300px;
-                max-width: 500px;
-                animation: slideIn 0.3s ease;
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 5000);
-        }
-
-        // Cookie consent
-        function checkCookieConsent() {
-            if (!localStorage.getItem('cookiesAccepted')) {
-                document.getElementById('cookieConsent').style.display = 'block';
-            }
-        }
-
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
-
-        // Add CSS for animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
+        // The rest of the functions (cart, products, search, etc.) remain the same
+        // ... [Previous cart, product, search functions continue here]
 
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);

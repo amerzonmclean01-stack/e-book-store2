@@ -803,6 +803,89 @@
             gap: 1rem;
         }
 
+        /* Footer */
+        footer {
+            background: var(--prophetic-blue);
+            color: var(--white);
+            padding: 3rem 1.5rem 1.5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--prophetic-gold);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .alt-bg {
+            background-color: var(--light-gray);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .menu-toggle {
@@ -1417,6 +1500,26 @@
                     image: "🕊️",
                     inventory: 50,
                     sku: "EBK-002"
+                },
+                {
+                    id: 3,
+                    name: "Destiny Declarations",
+                    description: "Powerful declarations to speak over your life and activate your destiny.",
+                    price: 199.99,
+                    category: "ebook",
+                    image: "🗣️",
+                    inventory: 75,
+                    sku: "EBK-003"
+                },
+                {
+                    id: 4,
+                    name: "The Prophetic Journey",
+                    description: "A 30-day devotional to deepen your prophetic understanding and walk.",
+                    price: 249.99,
+                    category: "ebook",
+                    image: "🛤️",
+                    inventory: 60,
+                    sku: "EBK-004"
                 }
             ],
             blogPosts: [
@@ -1425,6 +1528,20 @@
                     title: "Walking in Your Prophetic Purpose",
                     description: "Discovering how to align your daily life with the prophetic words spoken over you...",
                     date: "2025-11-20",
+                    content: "Full blog post content would go here..."
+                },
+                {
+                    id: 2,
+                    title: "Understanding God's Timing",
+                    description: "Learning to trust in divine timing when pursuing your God-given destiny...",
+                    date: "2025-11-15",
+                    content: "Full blog post content would go here..."
+                },
+                {
+                    id: 3,
+                    title: "The Power of Prophetic Declaration",
+                    description: "How speaking God's promises can activate your destiny and transform your life...",
+                    date: "2025-11-10",
                     content: "Full blog post content would go here..."
                 }
             ],
@@ -1438,6 +1555,26 @@
                     location: "Virtual (Zoom)",
                     time: "9:00 AM - 4:00 PM",
                     inventory: 20
+                },
+                {
+                    id: 2,
+                    title: "Destiny Discovery Intensive",
+                    description: "A weekend workshop focused on uncovering your unique purpose and calling.",
+                    date: "2025-12-20",
+                    price: 799.99,
+                    location: "Cape Town, South Africa",
+                    time: "9:00 AM - 5:00 PM",
+                    inventory: 15
+                },
+                {
+                    id: 3,
+                    title: "Prophetic Ministry Training",
+                    description: "Advanced training for those called to prophetic ministry and leadership.",
+                    date: "2026-01-10",
+                    price: 999.99,
+                    location: "Virtual (Zoom)",
+                    time: "10:00 AM - 3:00 PM",
+                    inventory: 25
                 }
             ]
         };
@@ -1796,8 +1933,440 @@
             }
         }
 
-        // The rest of the functions (cart, products, search, etc.) remain the same
-        // ... [Previous cart, product, search functions continue here]
+        // Product Functions
+        function renderProducts() {
+            if (!elements.productsGrid) return;
+            
+            elements.productsGrid.innerHTML = state.products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${product.image}
+                    </div>
+                    <button class="wishlist-btn" onclick="toggleWishlistItem(${product.id})">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <div class="product-content">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-footer">
+                            <div class="price">R ${product.price.toFixed(2)}</div>
+                            <div class="${product.inventory > 0 ? 'in-stock' : 'out-of-stock'}">
+                                ${product.inventory > 0 ? 'In Stock' : 'Out of Stock'}
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" 
+                                onclick="addToCart('${product.name}', ${product.price}, '${product.category}', ${product.id})"
+                                ${product.inventory === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderBlogPosts() {
+            if (!elements.blogContainer) return;
+            
+            elements.blogContainer.innerHTML = state.blogPosts.map(post => `
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #10b981, #3b82f6);">
+                        <i class="fas fa-blog"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>${post.title}</h3>
+                        <p>${post.description}</p>
+                        <div class="product-footer">
+                            <div style="color: #6b7280; font-size: 0.9rem;">
+                                <i class="fas fa-calendar"></i> ${new Date(post.date).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-book-open"></i> Read More
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderWorkshops() {
+            if (!elements.workshopsContainer) return;
+            
+            elements.workshopsContainer.innerHTML = state.workshops.map(workshop => `
+                <div class="product-card">
+                    <div class="product-image" style="background: linear-gradient(135deg, #f59e0b, #dc2626);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="product-content">
+                        <h3>${workshop.title}</h3>
+                        <p>${workshop.description}</p>
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <i class="fas fa-calendar"></i>
+                                <span>${new Date(workshop.date).toLocaleDateString()}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <i class="fas fa-clock"></i>
+                                <span>${workshop.time}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${workshop.location}</span>
+                            </div>
+                        </div>
+                        <div class="product-footer">
+                            <div class="price">R ${workshop.price.toFixed(2)}</div>
+                            <div class="${workshop.inventory > 0 ? 'in-stock' : 'out-of-stock'}">
+                                ${workshop.inventory > 0 ? `${workshop.inventory} spots left` : 'Sold Out'}
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" 
+                                onclick="addToCart('${workshop.title}', ${workshop.price}, 'workshop', ${workshop.id})"
+                                ${workshop.inventory === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-ticket-alt"></i> Register Now
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Cart Functions
+        function addToCart(name, price, category, id = null) {
+            if (!state.user) {
+                openAuthModal();
+                showNotification('Please log in to add items to your cart', 'warning');
+                return;
+            }
+            
+            const existingItem = state.cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                state.cart.push({
+                    id: id || Date.now(),
+                    name,
+                    price,
+                    category,
+                    quantity: 1
+                });
+            }
+            
+            updateCartUI();
+            showNotification(`${name} added to cart`, 'success');
+        }
+
+        function removeFromCart(itemId) {
+            state.cart = state.cart.filter(item => item.id !== itemId);
+            updateCartUI();
+        }
+
+        function updateCartQuantity(itemId, change) {
+            const item = state.cart.find(item => item.id === itemId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(itemId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        function updateCartUI() {
+            // Update cart count
+            const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            elements.cartCount.textContent = totalItems;
+            
+            // Update cart items
+            if (state.cart.length === 0) {
+                elements.cartItems.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart"></i><p>Your cart is empty</p></div>';
+                elements.cartTotal.textContent = 'R 0.00';
+                document.getElementById('checkoutBtn').disabled = true;
+            } else {
+                elements.cartItems.innerHTML = state.cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            ${getItemIcon(item.category)}
+                        </div>
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <div>R ${item.price.toFixed(2)}</div>
+                            <div class="cart-item-controls">
+                                <button class="quantity-btn" onclick="updateCartQuantity(${item.id}, -1)">-</button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateCartQuantity(${item.id}, 1)">+</button>
+                                <button class="remove-item" onclick="removeFromCart(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                elements.cartTotal.textContent = `R ${total.toFixed(2)}`;
+                document.getElementById('checkoutBtn').disabled = false;
+            }
+        }
+
+        function getItemIcon(category) {
+            switch(category) {
+                case 'ebook': return '📖';
+                case 'coaching': return '🎯';
+                case 'workshop': return '👥';
+                default: return '📦';
+            }
+        }
+
+        function toggleCart() {
+            elements.cartSidebar.classList.toggle('active');
+        }
+
+        // Wishlist Functions
+        function toggleWishlistItem(productId) {
+            if (!state.user) {
+                openAuthModal();
+                showNotification('Please log in to manage your wishlist', 'warning');
+                return;
+            }
+            
+            const existingIndex = state.wishlist.findIndex(item => item.id === productId);
+            
+            if (existingIndex !== -1) {
+                state.wishlist.splice(existingIndex, 1);
+                showNotification('Item removed from wishlist', 'success');
+            } else {
+                const product = state.products.find(p => p.id === productId);
+                if (product) {
+                    state.wishlist.push(product);
+                    showNotification('Item added to wishlist', 'success');
+                }
+            }
+            
+            updateWishlistUI();
+        }
+
+        function updateWishlistUI() {
+            // Update wishlist count
+            elements.wishlistCount.textContent = state.wishlist.length;
+            
+            // Update wishlist items
+            if (state.wishlist.length === 0) {
+                elements.wishlistItems.innerHTML = '<div class="empty-wishlist"><i class="fas fa-heart"></i><p>Your wishlist is empty</p></div>';
+            } else {
+                elements.wishlistItems.innerHTML = state.wishlist.map(item => `
+                    <div class="wishlist-item">
+                        <div class="wishlist-item-image">
+                            ${item.image}
+                        </div>
+                        <div class="wishlist-item-details">
+                            <h4>${item.name}</h4>
+                            <div>R ${item.price.toFixed(2)}</div>
+                            <div style="margin-top: 0.5rem;">
+                                <button class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" 
+                                        onclick="addToCart('${item.name}', ${item.price}, '${item.category}', ${item.id})">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                                <button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-left: 0.5rem;" 
+                                        onclick="toggleWishlistItem(${item.id})">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function toggleWishlist() {
+            elements.wishlistSidebar.classList.toggle('active');
+        }
+
+        // Search Functions
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                elements.searchResults.style.display = 'none';
+                return;
+            }
+            
+            // Search across products, blog posts, and workshops
+            const results = [];
+            
+            // Search products
+            state.products.forEach(product => {
+                if (product.name.toLowerCase().includes(query) || 
+                    product.description.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'product',
+                        icon: '📦',
+                        title: product.name,
+                        description: product.description,
+                        action: () => {
+                            scrollToSection('products');
+                            elements.searchInput.value = '';
+                            elements.searchResults.style.display = 'none';
+                        }
+                    });
+                }
+            });
+            
+            // Search blog posts
+            state.blogPosts.forEach(post => {
+                if (post.title.toLowerCase().includes(query) || 
+                    post.description.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'blog',
+                        icon: '📝',
+                        title: post.title,
+                        description: post.description,
+                        action: () => {
+                            scrollToSection('blog');
+                            elements.searchInput.value = '';
+                            elements.searchResults.style.display = 'none';
+                        }
+                    });
+                }
+            });
+            
+            // Search workshops
+            state.workshops.forEach(workshop => {
+                if (workshop.title.toLowerCase().includes(query) || 
+                    workshop.description.toLowerCase().includes(query)) {
+                    results.push({
+                        type: 'workshop',
+                        icon: '👥',
+                        title: workshop.title,
+                        description: workshop.description,
+                        action: () => {
+                            scrollToSection('workshops');
+                            elements.searchInput.value = '';
+                            elements.searchResults.style.display = 'none';
+                        }
+                    });
+                }
+            });
+            
+            // Display results
+            if (results.length > 0) {
+                elements.searchResults.innerHTML = results.map(result => `
+                    <div class="search-result-item" onclick="${result.action}">
+                        <div class="search-result-icon">${result.icon}</div>
+                        <div>
+                            <div style="font-weight: bold;">${result.title}</div>
+                            <div style="font-size: 0.9rem; color: #6b7280;">${result.description}</div>
+                        </div>
+                    </div>
+                `).join('');
+                elements.searchResults.style.display = 'block';
+            } else {
+                elements.searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+                elements.searchResults.style.display = 'block';
+            }
+        }
+
+        // Checkout Functions
+        function checkout() {
+            if (state.cart.length === 0) {
+                showNotification('Your cart is empty', 'warning');
+                return;
+            }
+            
+            if (!state.user) {
+                openAuthModal();
+                showNotification('Please log in to checkout', 'warning');
+                return;
+            }
+            
+            // Create order
+            const order = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                customerEmail: state.user.email,
+                items: [...state.cart],
+                total: state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            };
+            
+            state.orders.push(order);
+            state.cart = [];
+            updateCartUI();
+            toggleCart();
+            
+            showNotification('Order placed successfully!', 'success');
+        }
+
+        // Contact Form
+        function handleContact(e) {
+            e.preventDefault();
+            showNotification('Message sent successfully! We will get back to you soon.', 'success');
+            document.getElementById('contactForm').reset();
+        }
+
+        // Utility Functions
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleMenu() {
+            elements.navContainer.classList.toggle('active');
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div style="position: fixed; top: 100px; right: 20px; background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'}; color: white; padding: 1rem; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 2000; max-width: 300px;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function checkCookieConsent() {
+            if (!localStorage.getItem('cookieConsent')) {
+                document.getElementById('cookieConsent').style.display = 'block';
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'true');
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        // Social Sharing
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out The Definitive Word Ministry - Your Destiny Has Been Written');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out The Definitive Word Ministry - Your Destiny Has Been Written');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        }
+
+        function shareOnLinkedIn() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+        }
+
+        function shareOnWhatsApp() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out The Definitive Word Ministry - Your Destiny Has Been Written');
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+        }
 
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);

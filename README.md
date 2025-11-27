@@ -20,15 +20,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://js.stripe.com/v3/"></script>
     
-    <!-- Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
-    
     <style>
         :root {
             --prophetic-blue: #1e3a8a;
@@ -338,12 +329,16 @@
             justify-content: center;
             cursor: pointer;
             font-size: 1.2rem;
-            color: var(--prophetic-red);
+            color: #ccc;
             transition: all 0.3s;
         }
 
         .wishlist-btn.active {
             color: var(--prophetic-red);
+        }
+
+        .wishlist-btn:hover {
+            transform: scale(1.1);
         }
 
         .product-content {
@@ -624,249 +619,6 @@
             display: block;
         }
 
-        /* Admin Panel */
-        .admin-panel {
-            display: none;
-            background: var(--light-gray);
-            padding: 2rem;
-            border-radius: 10px;
-            margin-top: 2rem;
-        }
-
-        .admin-panel.active {
-            display: block;
-        }
-
-        .admin-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            overflow-x: auto;
-        }
-
-        .admin-tab {
-            padding: 0.75rem 1.5rem;
-            background: var(--white);
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark-gray);
-            white-space: nowrap;
-        }
-
-        .admin-tab.active {
-            background: var(--prophetic-blue);
-            color: var(--white);
-        }
-
-        .admin-content {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .admin-table th, .admin-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .admin-table th {
-            background: var(--light-gray);
-            color: var(--prophetic-blue);
-        }
-
-        .action-btn {
-            padding: 0.5rem 0.75rem;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-right: 0.5rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .edit-btn {
-            background: var(--warning);
-            color: var(--white);
-        }
-
-        .delete-btn {
-            background: var(--error);
-            color: var(--white);
-        }
-
-        .preview-btn {
-            background: var(--prophetic-blue);
-            color: var(--white);
-        }
-
-        /* Content Management */
-        .content-management {
-            margin-top: 2rem;
-        }
-
-        .content-type-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            overflow-x: auto;
-        }
-
-        .content-type-tab {
-            padding: 0.75rem 1.5rem;
-            background: var(--white);
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark-gray);
-            white-space: nowrap;
-        }
-
-        .content-type-tab.active {
-            background: var(--prophetic-blue);
-            color: var(--white);
-        }
-
-        .content-list {
-            margin-top: 1.5rem;
-        }
-
-        .content-item {
-            background: var(--light-gray);
-            padding: 1.5rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .content-item h4 {
-            color: var(--prophetic-blue);
-            margin-bottom: 0.5rem;
-        }
-
-        .content-item-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* Preview Section */
-        .preview-section {
-            margin-top: 2rem;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 1.5rem;
-        }
-
-        .preview-content {
-            background: var(--light-gray);
-            padding: 1.5rem;
-            border-radius: 5px;
-            margin-top: 1rem;
-        }
-
-        /* Social Share */
-        .social-share {
-            display: flex;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--prophetic-blue);
-            color: var(--white);
-            text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            text-align: left;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-section a {
-            color: var(--white);
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .footer-section a:hover {
-            opacity: 0.8;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            transition: background 0.3s;
-        }
-
-        .social-links a:hover {
-            background: var(--prophetic-red);
-        }
-
-        .footer-bottom {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* Utility Classes */
-        .alt-bg {
-            background: var(--light-gray);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
         /* Form Styles */
         .form-group {
             margin-bottom: 1.5rem;
@@ -959,35 +711,14 @@
                 right: -100%;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .admin-tabs, .content-type-tabs {
+            .cookie-content {
                 flex-direction: column;
+                text-align: center;
             }
 
             .modal-content {
                 padding: 1.5rem;
             }
-
-            .cookie-content {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        /* Stripe Elements */
-        .StripeElement {
-            padding: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
-            margin: 1rem 0;
         }
 
         /* Loading Spinner */
@@ -1004,11 +735,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
@@ -1211,140 +937,6 @@
         </div>
     </section>
 
-    <!-- Admin Panel (Hidden by default) -->
-    <section id="admin" class="hidden">
-        <h2>Admin Panel</h2>
-        <div class="admin-panel">
-            <div class="admin-tabs">
-                <button class="admin-tab active" onclick="switchAdminTab('products')">Products</button>
-                <button class="admin-tab" onclick="switchAdminTab('blog')">Blog Posts</button>
-                <button class="admin-tab" onclick="switchAdminTab('workshops')">Workshops</button>
-                <button class="admin-tab" onclick="switchAdminTab('ministry')">Ministry</button>
-                <button class="admin-tab" onclick="switchAdminTab('users')">Users</button>
-                <button class="admin-tab" onclick="switchAdminTab('orders')">Orders</button>
-                <button class="admin-tab" onclick="switchAdminTab('settings')">Settings</button>
-            </div>
-            
-            <div class="admin-content">
-                <!-- Products Tab -->
-                <div id="admin-products" class="admin-tab-content active">
-                    <h3>Manage Products</h3>
-                    <button class="btn btn-primary" onclick="openProductModal()">
-                        <i class="fas fa-plus"></i> Add New Product
-                    </button>
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Inventory</th>
-                                <th>Category</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-products-table">
-                            <!-- Products will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Blog Posts Tab -->
-                <div id="admin-blog" class="admin-tab-content">
-                    <h3>Manage Blog Posts</h3>
-                    <button class="btn btn-primary" onclick="openContentModal('blog')">
-                        <i class="fas fa-plus"></i> Add New Blog Post
-                    </button>
-                    <div class="content-list" id="admin-blog-list">
-                        <!-- Blog posts will be populated here -->
-                    </div>
-                </div>
-                
-                <!-- Workshops Tab -->
-                <div id="admin-workshops" class="admin-tab-content">
-                    <h3>Manage Workshops</h3>
-                    <button class="btn btn-primary" onclick="openContentModal('workshop')">
-                        <i class="fas fa-plus"></i> Add New Workshop
-                    </button>
-                    <div class="content-list" id="admin-workshops-list">
-                        <!-- Workshops will be populated here -->
-                    </div>
-                </div>
-                
-                <!-- Ministry Tab -->
-                <div id="admin-ministry" class="admin-tab-content">
-                    <h3>Manage Ministry Content</h3>
-                    <button class="btn btn-primary" onclick="openContentModal('ministry')">
-                        <i class="fas fa-plus"></i> Add Ministry Content
-                    </button>
-                    <div class="content-list" id="admin-ministry-list">
-                        <!-- Ministry content will be populated here -->
-                    </div>
-                </div>
-                
-                <!-- Users Tab -->
-                <div id="admin-users" class="admin-tab-content">
-                    <h3>Manage Users</h3>
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-users-table">
-                            <!-- Users will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Orders Tab -->
-                <div id="admin-orders" class="admin-tab-content">
-                    <h3>Manage Orders</h3>
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-orders-table">
-                            <!-- Orders will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Settings Tab -->
-                <div id="admin-settings" class="admin-tab-content">
-                    <h3>Website Settings</h3>
-                    <div class="form-group">
-                        <label for="siteTitle">Site Title</label>
-                        <input type="text" id="siteTitle" value="The Definitive Word">
-                    </div>
-                    <div class="form-group">
-                        <label for="siteTagline">Site Tagline</label>
-                        <input type="text" id="siteTagline" value="Your Destiny Has Been Written">
-                    </div>
-                    <div class="form-group">
-                        <label for="primaryColor">Primary Color</label>
-                        <input type="color" id="primaryColor" value="#1e3a8a">
-                    </div>
-                    <div class="form-group">
-                        <label for="secondaryColor">Secondary Color</label>
-                        <input type="color" id="secondaryColor" value="#dc2626">
-                    </div>
-                    <button class="btn btn-primary" onclick="saveSettings()">
-                        <i class="fas fa-save"></i> Save Settings
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -1367,8 +959,6 @@
                     <li><a href="#coaching">Coaching</a></li>
                     <li><a href="#blog">Blog</a></li>
                     <li><a href="#workshops">Workshops</a></li>
-                    <li><a href="#" onclick="openModal('privacyModal')">Privacy Policy</a></li>
-                    <li><a href="#" onclick="openModal('termsModal')">Terms of Service</a></li>
                 </ul>
             </div>
             
@@ -1452,8 +1042,8 @@
                     <label for="loginPassword">Password</label>
                     <input type="password" id="loginPassword" required>
                 </div>
-                <div class="form-footer">
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                    <a href="#" style="color: var(--prophetic-blue); text-decoration: none;">Forgot Password?</a>
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
             </form>
@@ -1475,118 +1065,7 @@
                     <label for="registerConfirmPassword">Confirm Password</label>
                     <input type="password" id="registerConfirmPassword" required>
                 </div>
-                <div class="form-footer">
-                    <button type="submit" class="btn btn-primary">Create Account</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Product Modal (for admin) -->
-    <div class="modal" id="productModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="productModalTitle">Add New Product</h3>
-                <button class="close-modal" onclick="closeProductModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form id="productForm">
-                <div class="form-group">
-                    <label for="productName">Product Name</label>
-                    <input type="text" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Description</label>
-                    <textarea id="productDescription" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="productPrice">Price (ZAR)</label>
-                    <input type="number" id="productPrice" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="productInventory">Inventory</label>
-                    <input type="number" id="productInventory" required>
-                </div>
-                <div class="form-group">
-                    <label for="productSKU">SKU</label>
-                    <input type="text" id="productSKU" required>
-                </div>
-                <div class="form-group">
-                    <label for="productCategory">Category</label>
-                    <select id="productCategory" required>
-                        <option value="ebook">E-book</option>
-                        <option value="workshop">Workshop</option>
-                        <option value="coaching">Coaching</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productImageUpload">Product Image</label>
-                    <input type="file" id="productImageUpload" accept="image/*" onchange="handleImageUpload(event)">
-                    <div id="imagePreview" style="margin-top: 0.5rem;"></div>
-                </div>
-                <input type="hidden" id="productImage">
-                
-                <!-- Preview Section -->
-                <div class="preview-section">
-                    <h4>Preview</h4>
-                    <div class="preview-content" id="productPreview">
-                        <p><strong>Product Preview:</strong> Your product will appear here as you type.</p>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Save Product</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Content Modal (for admin) -->
-    <div class="modal" id="contentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="contentModalTitle">Add New Content</h3>
-                <button class="close-modal" onclick="closeContentModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form id="contentForm">
-                <div class="form-group">
-                    <label for="contentTitle">Title</label>
-                    <input type="text" id="contentTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="contentDescription">Description</label>
-                    <textarea id="contentDescription" required></textarea>
-                </div>
-                <div class="form-group" id="contentDateGroup">
-                    <label for="contentDate">Date</label>
-                    <input type="date" id="contentDate">
-                </div>
-                <div class="form-group" id="contentPriceGroup">
-                    <label for="contentPrice">Price (ZAR)</label>
-                    <input type="number" id="contentPrice" step="0.01">
-                </div>
-                <div class="form-group" id="contentLocationGroup">
-                    <label for="contentLocation">Location</label>
-                    <input type="text" id="contentLocation">
-                </div>
-                <div class="form-group" id="contentTimeGroup">
-                    <label for="contentTime">Time</label>
-                    <input type="text" id="contentTime" placeholder="e.g., 9:00 AM - 4:00 PM">
-                </div>
-                
-                <!-- Preview Section -->
-                <div class="preview-section">
-                    <h4>Preview</h4>
-                    <div class="preview-content" id="contentPreview">
-                        <p><strong>Content Preview:</strong> Your content will appear here as you type.</p>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Save Content</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Account</button>
             </form>
         </div>
     </div>
@@ -1607,89 +1086,7 @@
         </div>
     </div>
 
-    <!-- Preview Modal -->
-    <div class="modal" id="previewModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="previewModalTitle">Content Preview</h3>
-                <button class="close-modal" onclick="closePreviewModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="previewContent">
-                <!-- Preview content will be dynamically added here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Legal Modals -->
-    <div class="modal" id="privacyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Privacy Policy</h3>
-                <button class="close-modal" onclick="closeModal('privacyModal')">×</button>
-            </div>
-            <div style="max-height: 400px; overflow-y: auto;">
-                <h4>Information We Collect</h4>
-                <p>We collect information you provide directly to us, such as when you create an account, make a purchase, or contact us for support.</p>
-                
-                <h4>How We Use Your Information</h4>
-                <p>We use the information we collect to provide, maintain, and improve our services, process transactions, and communicate with you.</p>
-                
-                <h4>Information Sharing</h4>
-                <p>We do not sell your personal information to third parties. We may share information with service providers who assist us in operating our website.</p>
-                
-                <h4>Your Rights</h4>
-                <p>You have the right to access, correct, or delete your personal information. Contact us at privacy@definitiveword.org for assistance.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="termsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Terms of Service</h3>
-                <button class="close-modal" onclick="closeModal('termsModal')">×</button>
-            </div>
-            <div style="max-height: 400px; overflow-y: auto;">
-                <h4>Acceptance of Terms</h4>
-                <p>By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.</p>
-                
-                <h4>Use License</h4>
-                <p>Permission is granted to temporarily access the materials on our website for personal, non-commercial transitory viewing only.</p>
-                
-                <h4>Products and Services</h4>
-                <p>All products and services are subject to availability. We reserve the right to discontinue any product at any time.</p>
-                
-                <h4>Limitations</h4>
-                <p>In no event shall The Definitive Word Ministry or its suppliers be liable for any damages arising out of the use or inability to use the materials on our website.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "The Definitive Word Ministry",
-      "description": "Your Destiny Has Been Written",
-      "url": "https://yourdomain.com",
-      "logo": "https://yourdomain.com/images/logo.png",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+27-21-123-4567",
-        "contactType": "customer service"
-      }
-    }
-    </script>
-
     <script>
-        // Backend API integration
-        const API_BASE_URL = 'https://your-api-domain.com/api';
-        const stripe = Stripe('pk_test_your_publishable_key_here');
-
         // Application State
         const state = {
             user: null,
@@ -1781,35 +1178,7 @@
                     time: "6:00 PM - 9:00 PM",
                     inventory: 20
                 }
-            ],
-            ministryInfo: [
-                {
-                    id: 1,
-                    title: "Our Mission",
-                    description: "To help believers understand that their destiny has already been written by God and equip them to walk confidently in their divine calling."
-                },
-                {
-                    id: 2,
-                    title: "Our Vision",
-                    description: "To see every believer living out their God-given purpose through prophetic teaching, life coaching, and biblical resources."
-                }
-            ],
-            users: [
-                {
-                    id: 1,
-                    name: "Admin User",
-                    email: "admin@definitiveword.org",
-                    role: "admin",
-                    password: "admin123"
-                }
-            ],
-            orders: [],
-            settings: {
-                siteTitle: "The Definitive Word",
-                siteTagline: "Your Destiny Has Been Written",
-                primaryColor: "#1e3a8a",
-                secondaryColor: "#dc2626"
-            }
+            ]
         };
 
         // DOM Elements
@@ -1822,165 +1191,14 @@
             cartCount: document.querySelector('.cart-count'),
             wishlistCount: document.querySelector('.wishlist-count'),
             authModal: document.getElementById('authModal'),
-            productModal: document.getElementById('productModal'),
-            contentModal: document.getElementById('contentModal'),
             paymentModal: document.getElementById('paymentModal'),
-            previewModal: document.getElementById('previewModal'),
             productsGrid: document.getElementById('productsGrid'),
             blogContainer: document.getElementById('blogContainer'),
             workshopsContainer: document.getElementById('workshopsContainer'),
-            adminSection: document.getElementById('admin'),
-            checkoutBtn: document.getElementById('checkoutBtn'),
             navContainer: document.getElementById('navContainer'),
             searchInput: document.getElementById('searchInput'),
             searchResults: document.getElementById('searchResults')
         };
-
-        // Backend API functions
-        async function fetchProducts() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/products`);
-                return await response.json();
-            } catch (error) {
-                console.error('Error fetching products:', error);
-                return state.products;
-            }
-        }
-
-        async function saveProduct(product) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/products`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRF-Token': getCSRFToken()
-                    },
-                    body: JSON.stringify(product)
-                });
-                return await response.json();
-            } catch (error) {
-                console.error('Error saving product:', error);
-                throw error;
-            }
-        }
-
-        async function authenticateUser(email, password) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                return await response.json();
-            } catch (error) {
-                console.error('Authentication error:', error);
-                throw error;
-            }
-        }
-
-        async function processOrder(orderData) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/orders`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${state.user.token}`
-                    },
-                    body: JSON.stringify(orderData)
-                });
-                return await response.json();
-            } catch (error) {
-                console.error('Order processing error:', error);
-                throw error;
-            }
-        }
-
-        async function sendOrderConfirmation(order) {
-            try {
-                await fetch(`${API_BASE_URL}/send-confirmation`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        to: order.customerEmail,
-                        subject: `Order Confirmation - #${order.id}`,
-                        order: order
-                    })
-                });
-            } catch (error) {
-                console.error('Email sending failed:', error);
-            }
-        }
-
-        async function sendContactForm(data) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/contact`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                return response.ok;
-            } catch (error) {
-                console.error('Contact form submission failed:', error);
-                return false;
-            }
-        }
-
-        async function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            // Show preview
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('imagePreview').innerHTML = `
-                    <img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 5px;">
-                `;
-            };
-            reader.readAsDataURL(file);
-
-            // Upload to server
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/upload`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const { imageUrl } = await response.json();
-                document.getElementById('productImage').value = imageUrl;
-            } catch (error) {
-                console.error('Image upload failed:', error);
-                showNotification('Image upload failed', 'error');
-            }
-        }
-
-        // Security functions
-        function sanitizeInput(input) {
-            const div = document.createElement('div');
-            div.textContent = input;
-            return div.innerHTML;
-        }
-
-        function safeRenderContent(content) {
-            return content.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
-        function getCSRFToken() {
-            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        }
-
-        // Cookie consent
-        function checkCookieConsent() {
-            if (!localStorage.getItem('cookiesAccepted')) {
-                document.getElementById('cookieConsent').style.display = 'block';
-            }
-        }
-
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
 
         // Initialize the application
         function init() {
@@ -1989,56 +1207,289 @@
             renderWorkshops();
             updateCartUI();
             updateWishlistUI();
-            checkAuthState();
-            loadSettings();
             checkCookieConsent();
             
             // Set up event listeners
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             document.getElementById('registerForm').addEventListener('submit', handleRegister);
             document.getElementById('contactForm').addEventListener('submit', handleContact);
-            document.getElementById('productForm').addEventListener('submit', handleProductSubmit);
-            document.getElementById('contentForm').addEventListener('submit', handleContentSubmit);
             
-            // Add preview functionality
-            document.getElementById('productName').addEventListener('input', updateProductPreview);
-            document.getElementById('productDescription').addEventListener('input', updateProductPreview);
-            document.getElementById('productPrice').addEventListener('input', updateProductPreview);
-            document.getElementById('productCategory').addEventListener('change', updateProductPreview);
-            
-            document.getElementById('contentTitle').addEventListener('input', updateContentPreview);
-            document.getElementById('contentDescription').addEventListener('input', updateContentPreview);
-            document.getElementById('contentDate').addEventListener('input', updateContentPreview);
-            document.getElementById('contentPrice').addEventListener('input', updateContentPreview);
-            document.getElementById('contentLocation').addEventListener('input', updateContentPreview);
-            document.getElementById('contentTime').addEventListener('input', updateContentPreview);
-
             // Search functionality
             elements.searchInput.addEventListener('input', handleSearch);
-            elements.searchInput.addEventListener('focus', handleSearch);
-            
             document.addEventListener('click', function(e) {
                 if (!elements.searchResults.contains(e.target) && e.target !== elements.searchInput) {
                     elements.searchResults.style.display = 'none';
                 }
             });
+        }
 
-            // Check if user is admin
-            if (state.user && state.user.role === 'admin') {
-                showAdminPanel();
-                renderAdminData();
+        // Navigation Functions
+        function toggleMenu() {
+            elements.navContainer.classList.toggle('active');
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            toggleMenu();
+        }
+
+        // Cart Functions
+        function toggleCart() {
+            elements.cartSidebar.classList.toggle('active');
+        }
+
+        function addToCart(name, price, category, id = null) {
+            const productId = id || Date.now();
+            const product = state.products.find(p => p.id === productId);
+            
+            // Check inventory
+            if (product && product.inventory <= 0) {
+                showNotification('Sorry, this item is out of stock', 'error');
+                return;
             }
-
-            // Initialize service worker for PWA
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js')
-                .then(function(registration) {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(function(error) {
-                    console.log('Service Worker registration failed:', error);
+            
+            const existingItem = state.cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                // Check if we have enough inventory
+                if (product && existingItem.quantity >= product.inventory) {
+                    showNotification(`Only ${product.inventory} items available`, 'error');
+                    return;
+                }
+                existingItem.quantity += 1;
+            } else {
+                state.cart.push({
+                    id: productId,
+                    name,
+                    price,
+                    category,
+                    quantity: 1
                 });
             }
+            
+            updateCartUI();
+            showNotification(`${name} added to cart!`, 'success');
+            
+            if (category !== 'coaching') {
+                elements.cartSidebar.classList.add('active');
+            }
+        }
+
+        function removeFromCart(id) {
+            state.cart = state.cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Update cart items
+            elements.cartItems.innerHTML = '';
+            
+            if (state.cart.length === 0) {
+                elements.cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                elements.checkoutBtn.disabled = true;
+            } else {
+                state.cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-image">${getProductIcon(item.category)}</div>
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <div class="price">R ${item.price.toFixed(2)}</div>
+                            <div class="cart-item-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                                <button class="remove-item" onclick="removeFromCart(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    elements.cartItems.appendChild(cartItem);
+                });
+                elements.checkoutBtn.disabled = false;
+            }
+            
+            // Update cart total and count
+            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const count = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            elements.cartTotal.textContent = `R ${total.toFixed(2)}`;
+            elements.cartCount.textContent = count;
+        }
+
+        function updateQuantity(id, change) {
+            const item = state.cart.find(item => item.id === id);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        // Wishlist Functions
+        function toggleWishlist() {
+            elements.wishlistSidebar.classList.toggle('active');
+        }
+
+        function toggleWishlistItem(productId) {
+            const product = state.products.find(p => p.id === productId);
+            const existingIndex = state.wishlist.findIndex(item => item.id === productId);
+            
+            if (existingIndex !== -1) {
+                state.wishlist.splice(existingIndex, 1);
+                showNotification('Removed from wishlist', 'success');
+            } else {
+                state.wishlist.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    category: product.category,
+                    image: product.image
+                });
+                showNotification('Added to wishlist', 'success');
+            }
+            
+            updateWishlistUI();
+            renderProducts(); // Update wishlist buttons
+        }
+
+        function updateWishlistUI() {
+            // Update wishlist items
+            elements.wishlistItems.innerHTML = '';
+            
+            if (state.wishlist.length === 0) {
+                elements.wishlistItems.innerHTML = '<div class="empty-wishlist">Your wishlist is empty</div>';
+            } else {
+                state.wishlist.forEach(item => {
+                    const wishlistItem = document.createElement('div');
+                    wishlistItem.className = 'wishlist-item';
+                    wishlistItem.innerHTML = `
+                        <div class="wishlist-item-image">${item.image}</div>
+                        <div class="wishlist-item-details">
+                            <h4>${item.name}</h4>
+                            <div class="price">R ${item.price.toFixed(2)}</div>
+                            <div class="cart-item-controls">
+                                <button class="btn btn-primary" onclick="addToCart('${item.name}', ${item.price}, '${item.category}', ${item.id})">
+                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                </button>
+                                <button class="remove-item" onclick="toggleWishlistItem(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    elements.wishlistItems.appendChild(wishlistItem);
+                });
+            }
+            
+            // Update wishlist count
+            elements.wishlistCount.textContent = state.wishlist.length;
+        }
+
+        function getProductIcon(category) {
+            switch(category) {
+                case 'ebook': return '📖';
+                case 'workshop': return '🎓';
+                case 'coaching': return '🎯';
+                default: return '📦';
+            }
+        }
+
+        // Product Functions
+        function renderProducts() {
+            elements.productsGrid.innerHTML = '';
+            
+            state.products.forEach(product => {
+                const isInWishlist = state.wishlist.some(item => item.id === product.id);
+                const isOutOfStock = product.inventory <= 0;
+                
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">${product.image}</div>
+                    <button class="wishlist-btn ${isInWishlist ? 'active' : ''}" onclick="toggleWishlistItem(${product.id})">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <div class="product-content">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-footer">
+                            <div>
+                                <div class="price">R ${product.price.toFixed(2)}</div>
+                                <div class="${isOutOfStock ? 'out-of-stock' : 'in-stock'}">
+                                    ${isOutOfStock ? 'Out of Stock' : 'In Stock'}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="addToCart('${product.name}', ${product.price}, '${product.category}', ${product.id})" ${isOutOfStock ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                elements.productsGrid.appendChild(productCard);
+            });
+        }
+
+        // Blog Functions
+        function renderBlogPosts() {
+            const blogContainer = document.getElementById('blogContainer');
+            blogContainer.innerHTML = '';
+            
+            state.blogPosts.forEach(post => {
+                const blogPost = document.createElement('article');
+                blogPost.style.cssText = 'background: var(--light-gray); padding: 2rem; border-radius: 10px; border-left: 4px solid var(--prophetic-blue);';
+                blogPost.innerHTML = `
+                    <h3 style="color: var(--prophetic-blue); margin-bottom: 0.5rem;">${post.title}</h3>
+                    <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem;">${formatDate(post.date)}</p>
+                    <p style="margin-bottom: 1rem;">${post.description}</p>
+                    <a href="#" style="color: var(--prophetic-blue); text-decoration: none; font-weight: bold;" onclick="readBlogPost(${post.id}); return false;">
+                        Read More <i class="fas fa-arrow-right"></i>
+                    </a>
+                `;
+                blogContainer.appendChild(blogPost);
+            });
+        }
+
+        function readBlogPost(id) {
+            const post = state.blogPosts.find(p => p.id === id);
+            if (post) {
+                alert(`Opening blog post: "${post.title}"\n\n${post.content || "Full content would be displayed here in a complete implementation."}`);
+            }
+        }
+
+        // Workshop Functions
+        function renderWorkshops() {
+            const workshopsContainer = document.getElementById('workshopsContainer');
+            workshopsContainer.innerHTML = '';
+            
+            state.workshops.forEach(workshop => {
+                const isOutOfStock = workshop.inventory <= 0;
+                const workshopCard = document.createElement('div');
+                workshopCard.style.cssText = 'background: var(--white); border: 2px solid var(--prophetic-blue); padding: 2rem; border-radius: 10px; display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: center;';
+                workshopCard.innerHTML = `
+                    <div style="background: var(--prophetic-red); color: var(--white); padding: 2rem; text-align: center; border-radius: 10px;">
+                        <div style="font-size: 3rem; font-weight: bold;">${new Date(workshop.date).getDate()}</div>
+                        <div style="font-size: 1.2rem;">${new Date(workshop.date).toLocaleString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()}</div>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--prophetic-blue); margin-bottom: 1rem;">${workshop.title}</h3>
+                        <p style="margin-bottom: 1rem;">${workshop.description}</p>
+                        <p><strong>Location:</strong> ${workshop.location}</p>
+                        <p><strong>Time:</strong> ${workshop.time}</p>
+                        <p><strong>Cost:</strong> R ${workshop.price.toFixed(2)}</p>
+                        <p><strong>Spots:</strong> ${workshop.inventory} remaining</p>
+                        <button class="btn btn-primary" onclick="addToCart('${workshop.title}', ${workshop.price}, 'workshop', ${workshop.id})" ${isOutOfStock ? 'disabled' : ''}>
+                            <i class="fas fa-ticket-alt"></i> ${isOutOfStock ? 'Sold Out' : 'Register Now'}
+                        </button>
+                    </div>
+                `;
+                workshopsContainer.appendChild(workshopCard);
+            });
         }
 
         // Search functionality
@@ -2112,6 +1563,243 @@
             }
         }
 
+        // Auth Functions
+        function openAuthModal(tab = 'login') {
+            elements.authModal.classList.add('active');
+            switchAuthTab(tab);
+        }
+
+        function closeAuthModal() {
+            elements.authModal.classList.remove('active');
+        }
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:nth-child(1)').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+                document.getElementById('authModalTitle').textContent = 'Login to Your Account';
+            } else {
+                document.querySelector('.auth-tab:nth-child(2)').classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+                document.getElementById('authModalTitle').textContent = 'Create New Account';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple authentication
+            if (email === 'admin@definitiveword.org' && password === 'admin123') {
+                state.user = {
+                    name: 'Admin User',
+                    email: email,
+                    role: 'admin'
+                };
+                closeAuthModal();
+                showNotification('Login successful!', 'success');
+            } else if (email && password) {
+                state.user = {
+                    name: email.split('@')[0],
+                    email: email,
+                    role: 'customer'
+                };
+                closeAuthModal();
+                showNotification('Login successful!', 'success');
+            } else {
+                showNotification('Please enter email and password', 'error');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (!name || !email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            state.user = {
+                name: name,
+                email: email,
+                role: 'customer'
+            };
+            
+            closeAuthModal();
+            showNotification('Account created successfully!', 'success');
+        }
+
+        // Checkout Functions
+        function checkout() {
+            if (state.cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                return;
+            }
+            
+            // Check if cart contains coaching session (free item)
+            const hasCoaching = state.cart.some(item => item.category === 'coaching');
+            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            if (hasCoaching && total === 0) {
+                completeFreeOrder();
+            } else {
+                showPaymentOptions();
+            }
+        }
+
+        function showPaymentOptions() {
+            elements.paymentModal.classList.add('active');
+            
+            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            elements.paymentContent.innerHTML = `
+                <h4>Order Summary</h4>
+                <div style="margin: 1rem 0;">
+                    ${state.cart.map(item => `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>${item.name} x${item.quantity}</span>
+                            <span>R ${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                    `).join('')}
+                    <hr style="margin: 1rem 0;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                        <span>Total:</span>
+                        <span>R ${total.toFixed(2)}</span>
+                    </div>
+                </div>
+                
+                <h4>Select Payment Method</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                    <button class="btn btn-primary" onclick="processStripePayment()" style="display: flex; flex-direction: column; align-items: center; padding: 1rem;">
+                        <i class="fab fa-cc-stripe" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <span>Credit/Debit Card</span>
+                    </button>
+                    <button class="btn btn-outline" onclick="processPayPalPayment()" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; border-color: var(--prophetic-blue); color: var(--prophetic-blue);">
+                        <i class="fab fa-paypal" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <span>PayPal</span>
+                    </button>
+                </div>
+                
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button class="btn" onclick="closePaymentModal()" style="background: #6b7280; color: white; width: 100%;">
+                        Cancel
+                    </button>
+                </div>
+            `;
+        }
+
+        function closePaymentModal() {
+            elements.paymentModal.classList.remove('active');
+        }
+
+        function processStripePayment() {
+            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            elements.paymentContent.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; color: var(--prophetic-blue); margin-bottom: 1rem;">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h4>Processing Payment...</h4>
+                    <p>Please wait while we process your payment</p>
+                    <div style="margin: 2rem 0;">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            `;
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                completePaidOrder();
+            }, 2000);
+        }
+
+        function processPayPalPayment() {
+            alert('PayPal integration would be implemented here. For demo purposes, we will complete the order.');
+            completePaidOrder();
+        }
+
+        function completeFreeOrder() {
+            const order = {
+                id: Date.now(),
+                customerName: state.user ? state.user.name : 'Guest',
+                customerEmail: state.user ? state.user.email : 'guest@example.com',
+                items: [...state.cart],
+                total: 0,
+                status: 'completed',
+                date: new Date().toISOString()
+            };
+            
+            showNotification('Your coaching session has been booked! We will contact you shortly.', 'success');
+            
+            state.cart = [];
+            updateCartUI();
+            toggleCart();
+            
+            closePaymentModal();
+        }
+
+        function completePaidOrder() {
+            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            const order = {
+                id: Date.now(),
+                customerName: state.user ? state.user.name : 'Guest',
+                customerEmail: state.user ? state.user.email : 'guest@example.com',
+                items: [...state.cart],
+                total: total,
+                status: 'completed',
+                date: new Date().toISOString()
+            };
+            
+            elements.paymentContent.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4>Payment Successful!</h4>
+                    <p>Thank you for your purchase. Your order has been confirmed.</p>
+                    <p>Order ID: <strong>#${order.id}</strong></p>
+                    <p>Total: <strong>R ${total.toFixed(2)}</strong></p>
+                    <p>A confirmation email has been sent to <strong>${state.user ? state.user.email : 'your email'}</strong></p>
+                    <button class="btn btn-primary" onclick="closePaymentModal()" style="margin-top: 1rem;">
+                        Continue Shopping
+                    </button>
+                </div>
+            `;
+            
+            state.cart = [];
+            updateCartUI();
+        }
+
+        // Contact Form Handler
+        function handleContact(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            console.log('Contact form submitted:', { name, email, subject, message });
+            
+            showNotification('Thank you for your message! We will get back to you soon.', 'success');
+            e.target.reset();
+        }
+
         // Social sharing
         function shareOnFacebook() {
             const url = encodeURIComponent(window.location.href);
@@ -2135,9 +1823,73 @@
             window.open(`https://wa.me/?text=${text}`, '_blank');
         }
 
-        // The rest of the functions remain the same as in the previous implementation
-        // (Navigation, Cart, Wishlist, Admin, Auth, etc.)
-        // ... [Previous JavaScript code continues here with all the same functions]
+        // Utility Functions
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" style="background: none; border: none; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 1300;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 300px;
+                max-width: 500px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Cookie consent
+        function checkCookieConsent() {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookieConsent').style.display = 'block';
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
 
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
